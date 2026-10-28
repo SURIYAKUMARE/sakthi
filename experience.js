@@ -855,94 +855,58 @@ class BirthdayExperience {
           </section>
 
           <!-- ==========================================
-               SCREEN G: PHOTO COLLAGE / SCRAPBOOK MEMORIES
+               SCREEN G: PHOTO MEMORIES - DEDICATED MASTERPIECE
                ========================================== -->
           <section class="exp-screen" id="screen-g">
-            <div class="scrapbook-header">
-              <h1 class="scrapbook-title">${birthdayConfig.scrapbook.title}</h1>
-              <p class="scrapbook-subtitle">${birthdayConfig.scrapbook.subtitle}</p>
-            </div>
+            <!-- Full Ambient Background Layer -->
+            <div class="memories-ambient-bg" aria-hidden="true"></div>
+            <div class="memories-vignette" aria-hidden="true"></div>
 
-            <!-- Featured Masterpiece Showcase Card -->
-            <div class="scrapbook-featured-hero" id="featuredArtworkCard" role="button" tabindex="0" title="Click to view full screen">
-              <div class="featured-badge">
-                <span class="badge-sparkle">✨</span>
-                <span>Special Dedicated Artwork</span>
-                <span class="badge-sparkle">✨</span>
+            <div class="memories-showcase-container">
+              <!-- Header Title -->
+              <div class="memories-header-badge">
+                <h1 class="memories-art-title">Krithika — One Name ♥ Many Languages ♥ Same Soul</h1>
+                <p class="memories-art-sub">Different scripts ♥ Same name ♥ Krithika</p>
               </div>
-              
-              <div class="featured-frame">
-                <div class="featured-tape featured-tape--top-left"></div>
-                <div class="featured-tape featured-tape--top-right"></div>
-                
-                <div class="featured-img-container">
-                  <img src="${birthdayConfig.scrapbook.featured.src}" alt="${birthdayConfig.scrapbook.featured.title}" class="featured-hero-img" id="featuredArtworkImg" />
-                  <div class="featured-overlay">
-                    <span class="fullscreen-cta-pill">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
-                      </svg>
-                      Tap to View Full Screen ⛶
-                    </span>
-                  </div>
-                </div>
 
-                <div class="featured-hero-meta">
-                  <h2 class="featured-hero-title">${birthdayConfig.scrapbook.featured.title}</h2>
-                  <p class="featured-hero-quote">${birthdayConfig.scrapbook.featured.quote}</p>
-                  <p class="featured-hero-caption">${birthdayConfig.scrapbook.featured.caption}</p>
-                  <div class="featured-hero-action-bar">
-                    <button class="btn-fullscreen-hero" id="btnOpenHeroFullscreen" type="button">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
-                      </svg>
-                      View Full Screen ⛶
-                    </button>
-                    <span class="featured-hint">23 World Scripts • Tamil, Telugu, Hindi, Arabic, Japanese, Korean & more</span>
-                  </div>
+              <!-- Fullscreen Centerpiece Artwork Frame -->
+              <div class="memories-artwork-frame" id="featuredArtworkCard" role="button" tabindex="0" title="Click to expand full screen">
+                <img
+                  src="/images/krithika_languages.jpg"
+                  alt="Krithika — One Name Many Languages Same Soul"
+                  class="memories-artwork-img"
+                  id="featuredArtworkImg"
+                />
+                <div class="memories-frame-overlay">
+                  <span class="memories-tap-pill">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                    </svg>
+                    Tap to Expand Full Screen ⛶
+                  </span>
                 </div>
               </div>
-            </div>
 
-            <!-- Scrapbook Divider -->
-            <div class="scrapbook-section-divider">
-              <span>✦ &nbsp; More Cherished Snapshots &nbsp; ✦</span>
-            </div>
+              <!-- Dedicated Caption Bar -->
+              <p class="memories-art-caption">
+                ${birthdayConfig.scrapbook.caption}
+              </p>
 
-            <div class="scrapbook-grid">
-              ${birthdayConfig.scrapbook.photos.map(p => `
-                <div class="polaroid-card" style="transform: rotate(${p.rotation}deg);" data-photo-id="${p.id}" role="button" tabindex="0">
-                  <div class="polaroid-tape"></div>
-                  <div class="polaroid-img-wrap" style="background: ${p.gradient};">
-                    ${p.src ? `<img src="${p.src}" alt="${p.title}" class="polaroid-img" />` : `
-                      <div class="polaroid-placeholder">
-                        <span class="polaroid-placeholder-icon">📷</span>
-                        <strong style="font-size: 15px;">${p.title}</strong>
-                        <span style="font-size: 12px; opacity: 0.9; margin-top: 4px;">${p.tag}</span>
-                      </div>
-                    `}
-                  </div>
-                  <p class="polaroid-caption">${p.title}</p>
-                  <p class="polaroid-date">${p.date}</p>
-                </div>
-              `).join('')}
-            </div>
-
-            <div style="display: flex; gap: 14px; justify-content: center; margin-top: 36px; flex-wrap: wrap;">
-              <button class="btn-primary" style="background: rgba(255,255,255,0.15); color: #fff;" data-goto="screen-c">
-                ← Back to Gifts
-              </button>
-              <button class="btn-primary" data-goto="screen-h">
-                Next: Vinyl Music Player 🎵 →
-              </button>
-            </div>
-          </section>
-              <button class="btn-primary" style="background: rgba(255,255,255,0.15); color: #fff;" data-goto="screen-c">
-                ← Back to Gifts
-              </button>
-              <button class="btn-primary" data-goto="screen-h">
-                Next: Vinyl Music Player 🎵 →
-              </button>
+              <!-- Bottom Action Navigation -->
+              <div class="memories-bottom-controls">
+                <button class="btn-primary" style="background: rgba(255,255,255,0.18); color: #fff;" data-goto="screen-e-cake">
+                  ← Back to Cake
+                </button>
+                <button class="btn-fullscreen-hero" id="btnOpenHeroFullscreen" type="button">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                  </svg>
+                  View Full Screen ⛶
+                </button>
+                <button class="btn-primary" data-goto="screen-h">
+                  Next: Vinyl Music Player 🎵 →
+                </button>
+              </div>
             </div>
           </section>
 

@@ -1442,207 +1442,175 @@
 }
 
 /* ============================================================
-   SCREEN G — PHOTO COLLAGE / SCRAPBOOK MEMORIES
+   SCREEN G — DEDICATED MASTERPIECE (FULL BACKGROUND & ONLY THIS PHOTO)
    ============================================================ */
-.scrapbook-header {
-  text-align: center;
-  margin-bottom: 24px;
-}
-
-.scrapbook-title {
-  font-family: "Great Vibes", cursive;
-  font-size: clamp(44px, 10vw, 72px);
-  color: #fffaf5;
-  margin-bottom: 6px;
-}
-
-.scrapbook-subtitle {
-  font-size: clamp(15px, 3.4vw, 18px);
-  color: #ffd6df;
-  font-style: italic;
-}
-
-/* Featured Masterpiece Showcase Card */
-.scrapbook-featured-hero {
+#screen-g {
+  position: relative;
+  min-height: calc(100vh - 70px);
   width: 100%;
-  max-width: 860px;
-  margin: 0 auto 32px;
-  position: relative;
-  cursor: pointer;
-  text-align: left;
-}
-
-.featured-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(225, 29, 72, 0.35));
-  border: 1px solid rgba(251, 191, 36, 0.6);
-  padding: 6px 16px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #fef3c7;
-  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
-  margin-bottom: 12px;
-}
-
-.badge-sparkle {
-  font-size: 14px;
-}
-
-.featured-frame {
-  background: #fffaf5;
-  border-radius: 8px;
-  padding: 18px 18px 24px;
-  box-shadow: 0 20px 50px -10px rgba(10, 1, 4, 0.65), 0 0 0 1px rgba(229, 179, 88, 0.3);
-  position: relative;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
-}
-
-.scrapbook-featured-hero:hover .featured-frame {
-  transform: translateY(-5px);
-  box-shadow: 0 26px 65px -10px rgba(225, 29, 72, 0.35), 0 0 0 2px rgba(251, 191, 36, 0.55);
-}
-
-.featured-tape {
-  position: absolute;
-  width: 80px;
-  height: 24px;
-  background: rgba(255, 230, 200, 0.85);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
-  z-index: 5;
-}
-
-.featured-tape--top-left {
-  top: -10px;
-  left: 28px;
-  transform: rotate(-5deg);
-}
-
-.featured-tape--top-right {
-  top: -10px;
-  right: 28px;
-  transform: rotate(4deg);
-}
-
-.featured-img-container {
-  width: 100%;
-  max-height: 520px;
-  min-height: 240px;
-  border-radius: 6px;
-  overflow: hidden;
-  position: relative;
-  background: #110206;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+  padding: 16px 16px 32px;
+  overflow: hidden;
 }
 
-.featured-hero-img {
-  width: 100%;
-  height: auto;
-  max-height: 520px;
-  object-fit: contain;
-  transition: transform 0.45s ease;
-  display: block;
+/* Ambient full background layer using the exact artwork */
+.memories-ambient-bg {
+  position: absolute;
+  inset: -30px;
+  background-image: url('/images/krithika_languages.jpg');
+  background-position: center;
+  background-size: cover;
+  filter: blur(34px) brightness(0.42);
+  -webkit-filter: blur(34px) brightness(0.42);
+  transform: scale(1.1);
+  pointer-events: none;
+  z-index: 0;
 }
 
-.scrapbook-featured-hero:hover .featured-hero-img {
-  transform: scale(1.02);
-}
-
-.featured-overlay {
+/* Cinematic romantic vignette */
+.memories-vignette {
   position: absolute;
   inset: 0;
-  background: rgba(18, 2, 5, 0.4);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  background: radial-gradient(ellipse at center, rgba(15, 2, 5, 0.22) 0%, rgba(15, 2, 5, 0.85) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Foreground Showcase Container */
+.memories-showcase-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1060px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.scrapbook-featured-hero:hover .featured-overlay {
+.memories-header-badge {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.memories-art-title {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(24px, 4.2vw, 36px);
+  font-weight: 700;
+  color: #fffaf5;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.85);
+  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+}
+
+.memories-art-sub {
+  font-size: clamp(14px, 2.5vw, 17px);
+  color: #fef08a;
+  font-style: italic;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Fullscreen Centerpiece Artwork Frame */
+.memories-artwork-frame {
+  position: relative;
+  width: 100%;
+  max-width: 980px;
+  max-height: 74vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 25px 70px -10px rgba(0, 0, 0, 0.9), 0 0 0 2px rgba(251, 191, 36, 0.55);
+  background: #fffdfa;
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.memories-artwork-frame:hover {
+  transform: scale(1.015) translateY(-3px);
+  box-shadow: 0 32px 85px -10px rgba(0, 0, 0, 0.95), 0 0 0 3px rgba(251, 191, 36, 0.85);
+}
+
+.memories-artwork-img {
+  width: 100%;
+  height: auto;
+  max-height: 74vh;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Hover Fullscreen CTA Overlay */
+.memories-frame-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 2, 5, 0.35);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.memories-artwork-frame:hover .memories-frame-overlay {
   opacity: 1;
 }
 
-.fullscreen-cta-pill {
+.memories-tap-pill {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 24px;
   background: rgba(255, 255, 255, 0.95);
   color: #881337;
   font-weight: 700;
   font-size: 15px;
-  letter-spacing: 0.02em;
+  padding: 12px 24px;
   border-radius: 999px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
   transform: translateY(8px);
-  transition: transform 0.3s ease, background 0.2s ease;
+  transition: transform 0.3s ease;
 }
 
-.fullscreen-cta-pill svg {
-  stroke: #881337;
-}
-
-.scrapbook-featured-hero:hover .fullscreen-cta-pill {
+.memories-artwork-frame:hover .memories-tap-pill {
   transform: translateY(0);
 }
 
-.featured-hero-meta {
-  padding-top: 18px;
-}
-
-.featured-hero-title {
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(22px, 4vw, 30px);
-  font-weight: 700;
-  color: #4c0519;
-  letter-spacing: 0.01em;
-  margin-bottom: 6px;
-}
-
-.featured-hero-quote {
-  font-size: clamp(14px, 2.5vw, 17px);
-  font-style: italic;
-  font-weight: 600;
-  color: #be123c;
-  margin-bottom: 8px;
-}
-
-.featured-hero-caption {
-  font-size: clamp(14px, 2.4vw, 16px);
-  color: #4a2c32;
+/* Caption underneath */
+.memories-art-caption {
+  font-size: clamp(13px, 2.2vw, 15px);
+  color: #ffe4e6;
   line-height: 1.6;
-  max-width: 800px;
-  margin-bottom: 16px;
+  max-width: 860px;
+  text-align: center;
+  margin-top: 14px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
 }
 
-.featured-hero-action-bar {
+/* Bottom Navigation Controls */
+.memories-bottom-controls {
+  margin-top: 16px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
   gap: 14px;
+  justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
-  padding-top: 12px;
-  border-top: 1px dashed rgba(225, 29, 72, 0.2);
 }
 
 .btn-fullscreen-hero {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 22px;
+  padding: 11px 24px;
   background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
   color: #fff;
   border: none;
   border-radius: 999px;
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(225, 29, 72, 0.35);
@@ -1655,131 +1623,13 @@
   filter: brightness(1.08);
 }
 
-.featured-hint {
-  font-size: 12px;
-  color: #9f707a;
-  font-style: italic;
-}
-
-/* Scrapbook Divider */
-.scrapbook-section-divider {
-  width: 100%;
-  max-width: 860px;
-  text-align: center;
-  position: relative;
-  margin: 36px auto 26px;
-}
-
-.scrapbook-section-divider::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 214, 223, 0.5), transparent);
-}
-
-.scrapbook-section-divider span {
-  position: relative;
-  background: #3a0815;
-  padding: 0 18px;
-  color: #ffd6df;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-style: italic;
-  font-size: 17px;
-  letter-spacing: 0.05em;
-}
-
-.scrapbook-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 28px;
-  width: 100%;
-  max-width: 860px;
-  padding: 10px;
-}
-
-.polaroid-card {
-  background: #fff;
-  border-radius: 4px;
-  padding: 12px 12px 24px;
-  box-shadow: 0 14px 35px -8px rgba(15, 1, 4, 0.55), 0 2px 5px rgba(0,0,0,0.15);
-  cursor: pointer;
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.3, 1), box-shadow 0.35s ease;
-  position: relative;
-}
-
-.polaroid-card:hover {
-  transform: translateY(-8px) scale(1.05) rotate(0deg) !important;
-  box-shadow: 0 22px 45px -8px rgba(229, 179, 88, 0.35);
-  z-index: 10;
-}
-
-.polaroid-tape {
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 65px;
-  height: 20px;
-  background: rgba(255, 230, 200, 0.75);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-  z-index: 3;
-}
-
-.polaroid-img-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 2px;
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f0e6e2;
-}
-
-.polaroid-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.polaroid-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  text-align: center;
-  color: #fff;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.3);
-}
-
-.polaroid-placeholder-icon {
-  font-size: 34px;
-  margin-bottom: 6px;
-}
-
-.polaroid-caption {
-  margin-top: 14px;
-  text-align: center;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-weight: 600;
-  font-size: 15px;
-  color: #4a2c32;
-  letter-spacing: 0.02em;
-}
-
-.polaroid-date {
-  font-size: 12px;
-  color: #947179;
-  font-style: italic;
-  text-align: center;
-  margin-top: 2px;
+@media (max-width: 640px) {
+  .memories-artwork-frame {
+    max-height: 60vh;
+  }
+  .memories-artwork-img {
+    max-height: 60vh;
+  }
 }
 
 /* ============================================================
