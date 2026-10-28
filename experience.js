@@ -844,15 +844,6 @@ class BirthdayExperience {
               </div>
             </div>
           </section>
-                <button class="btn-primary" style="background: rgba(255,255,255,0.15); color: #fff;" data-goto="screen-c">
-                  ← Back to Gifts
-                </button>
-                <button class="btn-primary" data-goto="screen-g">
-                  Next: Scrapbook Memories 📸 →
-                </button>
-              </div>
-            </div>
-          </section>
 
           <!-- ==========================================
                SCREEN G: PHOTO MEMORIES (FULL-IMAGE IMMERSIVE)

@@ -35,13 +35,15 @@
   overflow-x: hidden;
   overflow-y: auto;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), background 0.7s ease-in-out;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s, background 0.7s ease-in-out;
   font-family: "Cormorant Garamond", Georgia, serif;
 }
 
 .exp-overlay.is-active {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
 
@@ -186,6 +188,10 @@
   flex-direction: column;
   align-items: center;
   animation: expFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.exp-screen:not(.is-active) {
+  display: none !important;
 }
 
 .exp-screen.is-active {
@@ -1447,12 +1453,16 @@
 .exp-screen--memories-immersive {
   position: relative;
   overflow: hidden;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 10px 14px 24px;
   min-height: calc(100vh - 80px);
+}
+
+.exp-screen--memories-immersive.is-active {
+  display: flex;
 }
 
 /* Ambient Blurred Background of the Exact Artwork */
