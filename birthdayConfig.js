@@ -131,27 +131,32 @@ export const birthdayConfig = {
     wishMessagePhase2: "May all your beautiful dreams come true. Happy Birthday! ❤️",
   },
 
-  // Screen G: Photo Memories — Sole Masterpiece Feature
+  // Screen G: Photo Collage & Scrapbook Memories
   scrapbook: {
-    title: "Krithika — One Name ♥ Many Languages ♥ Same Soul",
-    subtitle: "Different scripts ♥ Same name ♥ Krithika",
-    quote: "“Different scripts ♥ Same name ♥ Krithika”",
-    caption:
-      "Tamil, Telugu, Kannada, Malayalam, Hindi, Bengali, Odia, Assamese, Punjabi, Gujarati, Marathi, Persian, Arabic, Russian, Japanese, Korean, Chinese, Thai, Hebrew, Greek, Turkish, Vietnamese, Armenian — across every script, language, and whisper in this universe, you are uniquely and wonderfully you.",
-    photo: {
-      id: 0,
+    title: "Moments & Memories",
+    subtitle: "One Name ♥ Many Languages ♥ Same Soul",
+    instruction: "Tap photo to view full screen",
+    featured: {
+      id: "featured-krithika-art",
       title: "Krithika — One Name ♥ Many Languages ♥ Same Soul",
       date: "Different scripts ♥ Same name ♥ Krithika",
-      caption: "Across every language in the world — no matter the script or whisper, your name always reflects the same radiant and beautiful soul.",
+      caption:
+        "Across every language in the world — Tamil, Telugu, Hindi, Malayalam, Kannada, Bengali, Odia, Gujarati, Assamese, Punjabi, Persian, Marathi, Arabic, Russian, Japanese, Korean, Chinese, Thai, Hebrew, Greek, Turkish, Vietnamese, Armenian — no matter the script or whisper, your name always reflects the same radiant and beautiful soul.",
+      tag: "Special Masterpiece",
       src: "/images/krithika_languages.jpg",
+      quote: "“Different scripts ♥ Same name ♥ Krithika”",
       isFeatured: true,
     },
     photos: [
       {
         id: 0,
-        title: "Krithika — One Name ♥ Many Languages ♥ Same Soul",
-        date: "Different scripts ♥ Same name ♥ Krithika",
-        caption: "Across every language in the world — no matter the script or whisper, your name always reflects the same radiant and beautiful soul.",
+        title: "Krithika — 23 World Scripts",
+        date: "Dedicated Artwork Tribute",
+        caption: "A magnificent pencil sketch capturing her eyes and bindi, encircled by 'Krithika' in 23 languages across the globe.",
+        rotation: 0,
+        gradient: "linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%)",
+        accent: "#e11d48",
+        tag: "Art Masterpiece",
         src: "/images/krithika_languages.jpg",
         isFeatured: true,
       },

@@ -855,30 +855,23 @@ class BirthdayExperience {
           </section>
 
           <!-- ==========================================
-               SCREEN G: PHOTO MEMORIES - DEDICATED MASTERPIECE
+               SCREEN G: PHOTO MEMORIES (FULL-IMAGE IMMERSIVE)
                ========================================== -->
-          <section class="exp-screen" id="screen-g">
-            <!-- Full Ambient Background Layer -->
-            <div class="memories-ambient-bg" aria-hidden="true"></div>
-            <div class="memories-vignette" aria-hidden="true"></div>
+          <section class="exp-screen exp-screen--memories-immersive" id="screen-g">
+            <!-- Full Ambient Image Blurred Backdrop -->
+            <div class="memories-ambient-backdrop" style="background-image: url('${birthdayConfig.scrapbook.featured.src}');" aria-hidden="true"></div>
 
-            <div class="memories-showcase-container">
-              <!-- Header Title -->
-              <div class="memories-header-badge">
-                <h1 class="memories-art-title">Krithika — One Name ♥ Many Languages ♥ Same Soul</h1>
-                <p class="memories-art-sub">Different scripts ♥ Same name ♥ Krithika</p>
-              </div>
-
-              <!-- Fullscreen Centerpiece Artwork Frame -->
-              <div class="memories-artwork-frame" id="featuredArtworkCard" role="button" tabindex="0" title="Click to expand full screen">
+            <div class="memories-fullscreen-stage">
+              <!-- Full Artwork Display - Only this photo on memories page -->
+              <div class="memories-hero-card" id="memoriesPhotoCard" role="button" tabindex="0" title="Tap to view full screen">
                 <img
-                  src="/images/krithika_languages.jpg"
-                  alt="Krithika — One Name Many Languages Same Soul"
-                  class="memories-artwork-img"
-                  id="featuredArtworkImg"
+                  src="${birthdayConfig.scrapbook.featured.src}"
+                  alt="${birthdayConfig.scrapbook.featured.title}"
+                  class="memories-hero-img"
+                  id="memoriesMainPhoto"
                 />
-                <div class="memories-frame-overlay">
-                  <span class="memories-tap-pill">
+                <div class="memories-expand-overlay">
+                  <span class="memories-expand-pill">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
                     </svg>
@@ -887,21 +880,16 @@ class BirthdayExperience {
                 </div>
               </div>
 
-              <!-- Dedicated Caption Bar -->
-              <p class="memories-art-caption">
-                ${birthdayConfig.scrapbook.caption}
-              </p>
-
-              <!-- Bottom Action Navigation -->
-              <div class="memories-bottom-controls">
-                <button class="btn-primary" style="background: rgba(255,255,255,0.18); color: #fff;" data-goto="screen-e-cake">
+              <!-- Dedicated Navigation Footer -->
+              <div class="memories-nav-footer">
+                <button class="btn-primary" style="background: rgba(30, 4, 10, 0.75); color: #ffd6df; border: 1px solid rgba(255, 215, 170, 0.4); backdrop-filter: blur(10px);" data-goto="screen-e-cake">
                   ← Back to Cake
                 </button>
-                <button class="btn-fullscreen-hero" id="btnOpenHeroFullscreen" type="button">
+                <button class="btn-fullscreen-hero" id="btnMemoriesFullScreen" type="button">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
                   </svg>
-                  View Full Screen ⛶
+                  Full Screen View ⛶
                 </button>
                 <button class="btn-primary" data-goto="screen-h">
                   Next: Vinyl Music Player 🎵 →
@@ -1306,17 +1294,17 @@ class BirthdayExperience {
       });
     }
 
-    // Screen G: Featured Masterpiece Full Screen
-    const featuredCard = document.getElementById('featuredArtworkCard');
-    const heroFsBtn = document.getElementById('btnOpenHeroFullscreen');
-    const openFeaturedHero = (e) => {
+    // Screen G: Single Full-Image Memory
+    const memoriesPhotoCard = document.getElementById('memoriesPhotoCard');
+    const memoriesFsBtn = document.getElementById('btnMemoriesFullScreen');
+    const openMemoriesFullscreen = (e) => {
       if (e) e.stopPropagation();
       if (birthdayConfig.scrapbook && birthdayConfig.scrapbook.featured) {
         this.openLightbox(birthdayConfig.scrapbook.featured, true);
       }
     };
-    if (featuredCard) featuredCard.addEventListener('click', openFeaturedHero);
-    if (heroFsBtn) heroFsBtn.addEventListener('click', openFeaturedHero);
+    if (memoriesPhotoCard) memoriesPhotoCard.addEventListener('click', openMemoriesFullscreen);
+    if (memoriesFsBtn) memoriesFsBtn.addEventListener('click', openMemoriesFullscreen);
 
     // Fullscreen toggle button in Lightbox
     const lbFsBtn = document.getElementById('lightboxFullscreenBtn');
