@@ -123,11 +123,12 @@ export const birthdayConfig = {
   cake: {
     title: "Make a Birthday Wish",
     subtitle: "Close your eyes, think of your sweetest dream, and blow!",
-    flavor: "Sweet Strawberry & Rose Cream Cake",
-    candlesCount: 3,
+    flavor: "Artisanal Strawberry & Vanilla Buttercream Cake",
+    candlesCount: 5,
     promptBefore: "Tap the cake or button below to blow out your candles! 🎂",
-    promptAfter: "🎉 May all your sweetest wishes come true, Krithika! ✨",
-    wishNote: "“May your year ahead be as sweet, delightful, and full of joy as this celebration!”",
+    promptBlowing: "💨 Making your wish...",
+    wishMessagePhase1: "Your wish is now on its way to the universe. ✨",
+    wishMessagePhase2: "May all your beautiful dreams come true. Happy Birthday! ❤️",
   },
 
   // Screen G: Photo Collage & Scrapbook Memories

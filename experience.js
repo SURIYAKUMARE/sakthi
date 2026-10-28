@@ -15,6 +15,12 @@ class BirthdayExperience {
   constructor() {
     this.currentScreen = 'screen-a';
     this.candlesBlown = false;
+    this.isBlowingInProgress = false;
+    this.isListeningForBlow = false;
+    this.micStream = null;
+    this.audioCtx = null;
+    this.analyser = null;
+    this.micRafId = null;
     this.confettiCanvas = null;
     this.confettiCtx = null;
     this.confettiParticles = [];
@@ -352,94 +358,476 @@ class BirthdayExperience {
               <h1 class="cake-title">${birthdayConfig.cake.title}</h1>
               <p class="cake-subtitle">${birthdayConfig.cake.subtitle}</p>
 
-              <!-- Realistic Luxury Artisanal Cake Stage -->
-              <div class="cake-interactive-stage" id="cakeStage" title="Tap the cake or candles to blow them out!">
-                <div class="cake-showcase-frame">
-                  <img
-                    src="/images/realistic_cake.jpg"
-                    alt="Luxury Artisanal Birthday Cake for Krithika"
-                    class="cake-real-photo"
-                    id="cakePhoto"
-                  />
-                  <!-- Warm Candlelight Ambient Reflection Glow on Cake -->
-                  <div class="cake-candle-ambient-glow" id="cakeAmbientGlow" aria-hidden="true"></div>
+              <!-- Realistic Animated 3D Artisanal Cake Stage -->
+              <div class="cake-interactive-stage" id="cakeStage" role="button" tabindex="0" title="Tap the cake or candles to blow them out!">
+                <svg class="cake-vector-scene" viewBox="0 0 600 620" preserveAspectRatio="xMidYMid meet" aria-label="Animated 3D Birthday Cake for Krithika">
+                  <defs>
+                    <!-- Soft Ground Shadows -->
+                    <radialGradient id="cakeGroundShadow" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="rgba(15, 1, 4, 0.75)" />
+                      <stop offset="60%" stop-color="rgba(25, 2, 7, 0.4)" />
+                      <stop offset="100%" stop-color="transparent" />
+                    </radialGradient>
+                    <radialGradient id="cakePlateOcclusion" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="rgba(45, 10, 16, 0.65)" />
+                      <stop offset="70%" stop-color="rgba(45, 10, 16, 0.25)" />
+                      <stop offset="100%" stop-color="transparent" />
+                    </radialGradient>
 
-                  <!-- Edible Gold Leaf & Berry Sparkle Glints -->
-                  <div class="cake-sparkle-layer" aria-hidden="true">
-                    <span class="cake-glint g1">✦</span>
-                    <span class="cake-glint g2">✦</span>
-                    <span class="cake-glint g3">✦</span>
-                    <span class="cake-glint g4">✦</span>
-                  </div>
+                    <!-- Metallic Gold Stand Gradients -->
+                    <linearGradient id="goldStandBaseGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#b45309" />
+                      <stop offset="20%" stop-color="#fef08a" />
+                      <stop offset="45%" stop-color="#d97706" />
+                      <stop offset="70%" stop-color="#fef9c3" />
+                      <stop offset="85%" stop-color="#ca8a04" />
+                      <stop offset="100%" stop-color="#78350f" />
+                    </linearGradient>
+                    <linearGradient id="goldStandStemGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#92400e" />
+                      <stop offset="25%" stop-color="#fef08a" />
+                      <stop offset="50%" stop-color="#d97706" />
+                      <stop offset="75%" stop-color="#fef9c3" />
+                      <stop offset="100%" stop-color="#78350f" />
+                    </linearGradient>
+                    <linearGradient id="goldStandPlateRim" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#78350f" />
+                      <stop offset="15%" stop-color="#d97706" />
+                      <stop offset="35%" stop-color="#fef9c3" />
+                      <stop offset="60%" stop-color="#b45309" />
+                      <stop offset="80%" stop-color="#fef08a" />
+                      <stop offset="100%" stop-color="#78350f" />
+                    </linearGradient>
+                    <radialGradient id="goldStandPlateTop" cx="45%" cy="35%" r="65%">
+                      <stop offset="0%" stop-color="#fef9c3" />
+                      <stop offset="35%" stop-color="#fde047" />
+                      <stop offset="70%" stop-color="#d97706" />
+                      <stop offset="100%" stop-color="#92400e" />
+                    </radialGradient>
 
-                  <!-- Interactive Animated Candle Flames & Smoke Physics Overlay -->
-                  <svg class="cake-flames-overlay" viewBox="0 0 1000 1000" fill="none">
-                    <defs>
-                      <radialGradient id="cakeFlameCore" cx="50%" cy="80%" r="70%">
-                        <stop offset="0%" stop-color="#ffffff" />
-                        <stop offset="25%" stop-color="#fef08a" />
-                        <stop offset="65%" stop-color="#f59e0b" />
-                        <stop offset="100%" stop-color="#ea580c" />
-                      </radialGradient>
-                      <radialGradient id="cakeFlameAura" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stop-color="rgba(254, 240, 138, 0.9)" />
-                        <stop offset="40%" stop-color="rgba(245, 158, 11, 0.45)" />
-                        <stop offset="100%" stop-color="transparent" />
-                      </radialGradient>
-                      <filter id="cakeGlowFilter" x="-50%" y="-50%" width="200%" height="200%">
-                        <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#ffd05a" flood-opacity="0.95"/>
-                        <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="#f59e0b" flood-opacity="0.6"/>
-                      </filter>
-                    </defs>
+                    <!-- Cake Cream & Buttercream Gradients -->
+                    <linearGradient id="cakeBodyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#ebd4c2" />
+                      <stop offset="12%" stop-color="#f7ede4" />
+                      <stop offset="35%" stop-color="#ffffff" />
+                      <stop offset="65%" stop-color="#fdf8f2" />
+                      <stop offset="85%" stop-color="#f1dfd0" />
+                      <stop offset="100%" stop-color="#dfc5b1" />
+                    </linearGradient>
+                    <radialGradient id="cakeTopGrad" cx="50%" cy="40%" r="55%">
+                      <stop offset="0%" stop-color="#ffffff" />
+                      <stop offset="65%" stop-color="#fbf5ee" />
+                      <stop offset="90%" stop-color="#f4e5d8" />
+                      <stop offset="100%" stop-color="#e8d3c2" />
+                    </radialGradient>
+                    <radialGradient id="ambientCandleGlow" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="rgba(254, 240, 138, 0.55)" />
+                      <stop offset="45%" stop-color="rgba(245, 158, 11, 0.28)" />
+                      <stop offset="80%" stop-color="rgba(234, 88, 12, 0.08)" />
+                      <stop offset="100%" stop-color="transparent" />
+                    </radialGradient>
+                    <radialGradient id="pearlCreamShade" cx="35%" cy="30%" r="65%">
+                      <stop offset="0%" stop-color="#ffffff" />
+                      <stop offset="50%" stop-color="#fbf4ee" />
+                      <stop offset="85%" stop-color="#e8d5c4" />
+                      <stop offset="100%" stop-color="#cca892" />
+                    </radialGradient>
 
-                    <!-- Candle 1 (Leftmost: 412, 140) -->
-                    <g class="cake-flame-unit u1" transform="translate(412, 140)">
-                      <circle cx="0" cy="0" r="32" fill="url(#cakeFlameAura)" class="flame-halo" />
-                      <g class="candle-flame-body" filter="url(#cakeGlowFilter)">
-                        <path d="M0,0 C-10,-12 -12,-32 0,-46 C12,-32 10,-12 0,0 Z" fill="url(#cakeFlameCore)" />
-                        <ellipse cx="0" cy="-8" rx="3.5" ry="7" fill="#ffffff" opacity="0.95" />
-                      </g>
-                      <path class="candle-smoke-wisp" d="M0,-4 Q-16,-34 10,-68 Q-10,-102 4,-136" stroke="#f1f5f9" stroke-width="3.5" fill="none" stroke-linecap="round" />
+                    <!-- Front Plaque Gradients -->
+                    <linearGradient id="plaqueBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#4a0412" />
+                      <stop offset="50%" stop-color="#6e0d22" />
+                      <stop offset="100%" stop-color="#33020b" />
+                    </linearGradient>
+                    <linearGradient id="plaqueGoldRim" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#b45309" />
+                      <stop offset="25%" stop-color="#fef08a" />
+                      <stop offset="50%" stop-color="#d97706" />
+                      <stop offset="75%" stop-color="#fef9c3" />
+                      <stop offset="100%" stop-color="#78350f" />
+                    </linearGradient>
+
+                    <!-- Fruit Gradients -->
+                    <radialGradient id="strawberryGrad" cx="35%" cy="30%" r="65%">
+                      <stop offset="0%" stop-color="#f43f5e" />
+                      <stop offset="45%" stop-color="#e11d48" />
+                      <stop offset="80%" stop-color="#9f1239" />
+                      <stop offset="100%" stop-color="#4c0519" />
+                    </radialGradient>
+                    <radialGradient id="strawberrySliceInside" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#ffffff" />
+                      <stop offset="35%" stop-color="#ffe4e6" />
+                      <stop offset="75%" stop-color="#f43f5e" />
+                      <stop offset="100%" stop-color="#be123c" />
+                    </radialGradient>
+                    <radialGradient id="blueberryGrad" cx="35%" cy="30%" r="65%">
+                      <stop offset="0%" stop-color="#818cf8" />
+                      <stop offset="40%" stop-color="#3730a3" />
+                      <stop offset="85%" stop-color="#1e1b4b" />
+                      <stop offset="100%" stop-color="#0f0e26" />
+                    </radialGradient>
+                    <linearGradient id="mintGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#86efac" />
+                      <stop offset="50%" stop-color="#22c55e" />
+                      <stop offset="100%" stop-color="#14532d" />
+                    </linearGradient>
+
+                    <!-- Candles Gradients -->
+                    <linearGradient id="candleBlush" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#fecdd3" />
+                      <stop offset="40%" stop-color="#ffffff" />
+                      <stop offset="70%" stop-color="#fda4af" />
+                      <stop offset="100%" stop-color="#e11d48" />
+                    </linearGradient>
+                    <linearGradient id="candleIvory" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#fde68a" />
+                      <stop offset="45%" stop-color="#ffffff" />
+                      <stop offset="75%" stop-color="#fef08a" />
+                      <stop offset="100%" stop-color="#d97706" />
+                    </linearGradient>
+                    <linearGradient id="goldSpiralRibbon" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#fef08a" />
+                      <stop offset="50%" stop-color="#d97706" />
+                      <stop offset="100%" stop-color="#b45309" />
+                    </linearGradient>
+
+                    <!-- Candle Flames Core & Aura -->
+                    <radialGradient id="flameCoreGrad" cx="50%" cy="75%" r="70%">
+                      <stop offset="0%" stop-color="#ffffff" />
+                      <stop offset="20%" stop-color="#fef08a" />
+                      <stop offset="60%" stop-color="#f59e0b" />
+                      <stop offset="90%" stop-color="#ea580c" />
+                      <stop offset="100%" stop-color="#b91c1c" />
+                    </radialGradient>
+                    <radialGradient id="flameHaloAura" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="rgba(254, 240, 138, 0.95)" />
+                      <stop offset="35%" stop-color="rgba(245, 158, 11, 0.55)" />
+                      <stop offset="70%" stop-color="rgba(234, 88, 12, 0.2)" />
+                      <stop offset="100%" stop-color="transparent" />
+                    </radialGradient>
+                    <radialGradient id="emberGlow" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#ffffff" />
+                      <stop offset="40%" stop-color="#ff4500" />
+                      <stop offset="85%" stop-color="#b91c1c" />
+                      <stop offset="100%" stop-color="transparent" />
+                    </radialGradient>
+
+                    <!-- Drop Shadow Filter -->
+                    <filter id="cakeFilterShadow" x="-30%" y="-30%" width="160%" height="160%">
+                      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#140105" flood-opacity="0.6" />
+                    </filter>
+                    <filter id="flameGlowGlint" x="-60%" y="-60%" width="220%" height="220%">
+                      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ffd05a" flood-opacity="0.95"/>
+                      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#f59e0b" flood-opacity="0.6"/>
+                    </filter>
+                  </defs>
+
+                  <!-- 1. Ground Drop Shadow -->
+                  <ellipse cx="300" cy="570" rx="225" ry="24" fill="url(#cakeGroundShadow)" />
+
+                  <!-- 2. Metallic Gold Cake Pedestal -->
+                  <g id="cakeStandGroup">
+                    <!-- Foot outer base bevel -->
+                    <ellipse cx="300" cy="546" rx="142" ry="18" fill="url(#goldStandBaseGrad)" />
+                    <path d="M158,546 C158,558 442,558 442,546 L442,536 C442,548 158,548 158,536 Z" fill="#78350f" opacity="0.6" />
+                    <ellipse cx="300" cy="536" rx="136" ry="15" fill="url(#goldStandBaseGrad)" />
+                    <!-- Hourglass pillar stem -->
+                    <path d="M260,442 C260,482 238,510 238,532 L362,532 C362,510 340,482 340,442 Z" fill="url(#goldStandStemGrad)" />
+                    <!-- Stem specular shine -->
+                    <path d="M288,442 C288,482 282,510 282,532 L312,532 C312,510 306,482 306,442 Z" fill="#ffffff" opacity="0.45" />
+                    <!-- Stand upper plate under-rim -->
+                    <path d="M72,438 C72,470 528,470 528,438 L528,426 C528,458 72,458 72,426 Z" fill="url(#goldStandPlateRim)" />
+                    <!-- Stand plate top bevel surface -->
+                    <ellipse cx="300" cy="426" rx="228" ry="28" fill="url(#goldStandPlateTop)" />
+                    <!-- Ambient occlusion shadow cast by cake onto gold plate -->
+                    <ellipse cx="300" cy="422" rx="188" ry="20" fill="url(#cakePlateOcclusion)" />
+                  </g>
+
+                  <!-- 3. Cake Cylindrical Body -->
+                  <g id="cakeBodyGroup" filter="url(#cakeFilterShadow)">
+                    <!-- Cake Body Sides & Bottom Rounding -->
+                    <path d="M122,286 L122,408 C122,466 478,466 478,408 L478,286 Z" fill="url(#cakeBodyGrad)" />
+                    <!-- Buttercream Spatula Texture Waves -->
+                    <path d="M122,330 Q300,366 478,330" stroke="#f6ede3" stroke-width="3.5" fill="none" opacity="0.8" />
+                    <path d="M122,372 Q300,408 478,372" stroke="#ebd2bd" stroke-width="2.5" fill="none" opacity="0.65" />
+                    <!-- Bottom Piped Cream Border (Pearl Rosettes along bottom curve) -->
+                    <g id="bottomCreamBorder">
+                      <circle cx="132" cy="410" r="13" fill="url(#pearlCreamShade)" />
+                      <circle cx="151" cy="420" r="13.5" fill="url(#pearlCreamShade)" />
+                      <circle cx="173" cy="429" r="14" fill="url(#pearlCreamShade)" />
+                      <circle cx="196" cy="437" r="14" fill="url(#pearlCreamShade)" />
+                      <circle cx="221" cy="443" r="14.5" fill="url(#pearlCreamShade)" />
+                      <circle cx="247" cy="448" r="14.5" fill="url(#pearlCreamShade)" />
+                      <circle cx="273" cy="451" r="15" fill="url(#pearlCreamShade)" />
+                      <circle cx="300" cy="452" r="15" fill="url(#pearlCreamShade)" />
+                      <circle cx="327" cy="451" r="15" fill="url(#pearlCreamShade)" />
+                      <circle cx="353" cy="448" r="14.5" fill="url(#pearlCreamShade)" />
+                      <circle cx="379" cy="443" r="14.5" fill="url(#pearlCreamShade)" />
+                      <circle cx="404" cy="437" r="14" fill="url(#pearlCreamShade)" />
+                      <circle cx="427" cy="429" r="14" fill="url(#pearlCreamShade)" />
+                      <circle cx="449" cy="420" r="13.5" fill="url(#pearlCreamShade)" />
+                      <circle cx="468" cy="410" r="13" fill="url(#pearlCreamShade)" />
                     </g>
 
-                    <!-- Candle 2 (Center-Left: 478, 126) -->
-                    <g class="cake-flame-unit u2" transform="translate(478, 126)">
-                      <circle cx="0" cy="0" r="34" fill="url(#cakeFlameAura)" class="flame-halo" />
-                      <g class="candle-flame-body" filter="url(#cakeGlowFilter)">
-                        <path d="M0,0 C-11,-13 -13,-35 0,-50 C13,-35 11,-13 0,0 Z" fill="url(#cakeFlameCore)" />
-                        <ellipse cx="0" cy="-9" rx="3.8" ry="7.5" fill="#ffffff" opacity="0.95" />
-                      </g>
-                      <path class="candle-smoke-wisp" d="M0,-4 Q12,-38 -10,-72 Q12,-106 -4,-140" stroke="#f1f5f9" stroke-width="3.8" fill="none" stroke-linecap="round" />
+                    <!-- Front Decorative Birthday Plaque -->
+                    <g id="frontPlaqueGroup" transform="translate(300, 362)">
+                      <ellipse cx="0" cy="0" rx="116" ry="29" fill="url(#plaqueBg)" stroke="url(#plaqueGoldRim)" stroke-width="3.5" />
+                      <ellipse cx="0" cy="0" rx="108" ry="23" fill="none" stroke="rgba(254, 240, 138, 0.45)" stroke-width="1.2" stroke-dasharray="4, 3" />
+                      <!-- Plaque Inscription -->
+                      <text x="0" y="5" text-anchor="middle" font-family="'Cormorant Garamond', Georgia, serif" font-size="16" font-weight="700" fill="#fef08a" letter-spacing="0.04em">
+                        Happy Birthday Krithika ♥
+                      </text>
+                    </g>
+                  </g>
+
+                  <!-- 4. Cake Top Surface & Fruit Garnishes -->
+                  <g id="cakeTopGroup">
+                    <!-- Top Frosting Ellipse -->
+                    <ellipse cx="300" cy="286" rx="178" ry="52" fill="url(#cakeTopGrad)" />
+
+                    <!-- Dynamic Warm Candlelight Reflection Glow on Cake Top -->
+                    <ellipse cx="300" cy="275" rx="165" ry="46" fill="url(#ambientCandleGlow)" class="cake-candle-ambient-glow" id="cakeAmbientGlow" />
+
+                    <!-- Top Perimeter Piped Whipped Cream Rosettes (14 peaks) -->
+                    <g id="topCreamRosettes">
+                      <!-- Back row rosettes -->
+                      <ellipse cx="152" cy="265" rx="15" ry="12" fill="url(#pearlCreamShade)" />
+                      <ellipse cx="195" cy="248" rx="16" ry="13" fill="url(#pearlCreamShade)" />
+                      <ellipse cx="246" cy="240" rx="17" ry="13" fill="url(#pearlCreamShade)" />
+                      <ellipse cx="300" cy="236" rx="18" ry="14" fill="url(#pearlCreamShade)" />
+                      <ellipse cx="354" cy="240" rx="17" ry="13" fill="url(#pearlCreamShade)" />
+                      <ellipse cx="405" cy="248" rx="16" ry="13" fill="url(#pearlCreamShade)" />
+                      <ellipse cx="448" cy="265" rx="15" ry="12" fill="url(#pearlCreamShade)" />
+                      <!-- Front row rosettes -->
+                      <ellipse cx="138" cy="292" rx="16" ry="14" fill="url(#pearlCreamShade)" />
+                      <ellipse cx="170" cy="316" rx="17" ry="14" fill="url(#pearlCreamShade)" />
+                      <ellipse cx="218" cy="330" rx="18" ry="15" fill="url(#pearlCreamShade)" />
+                      <ellipse cx="272" cy="336" rx="19" ry="15" fill="url(#pearlCreamShade)" />
+                      <ellipse cx="328" cy="336" rx="19" ry="15" fill="url(#pearlCreamShade)" />
+                      <ellipse cx="382" cy="330" rx="18" ry="15" fill="url(#pearlCreamShade)" />
+                      <ellipse cx="430" cy="316" rx="17" ry="14" fill="url(#pearlCreamShade)" />
+                      <ellipse cx="462" cy="292" rx="16" ry="14" fill="url(#pearlCreamShade)" />
                     </g>
 
-                    <!-- Candle 3 (Center-Right: 544, 126) -->
-                    <g class="cake-flame-unit u3" transform="translate(544, 126)">
-                      <circle cx="0" cy="0" r="34" fill="url(#cakeFlameAura)" class="flame-halo" />
-                      <g class="candle-flame-body" filter="url(#cakeGlowFilter)">
-                        <path d="M0,0 C-11,-13 -13,-35 0,-50 C13,-35 11,-13 0,0 Z" fill="url(#cakeFlameCore)" />
-                        <ellipse cx="0" cy="-9" rx="3.8" ry="7.5" fill="#ffffff" opacity="0.95" />
+                    <!-- Fresh Strawberries, Blueberries & Mint Leaves -->
+                    <g id="fruitsLayer">
+                      <!-- Mint Leaf Sprig (Left) -->
+                      <path d="M208,288 C192,274 186,260 200,252 C214,258 218,272 208,288 Z" fill="url(#mintGrad)" />
+                      <!-- Whole Strawberry (Center Left) -->
+                      <g transform="translate(232, 278) rotate(-12)">
+                        <path d="M0, -18 C15,-18 20,4 0,22 C-20,4 -15,-18 0,-18 Z" fill="url(#strawberryGrad)" />
+                        <!-- Seeds -->
+                        <circle cx="-5" cy="-6" r="1" fill="#fef08a" opacity="0.9" />
+                        <circle cx="4" cy="-4" r="1" fill="#fef08a" opacity="0.9" />
+                        <circle cx="-2" cy="4" r="1" fill="#fef08a" opacity="0.9" />
+                        <circle cx="5" cy="8" r="0.9" fill="#fef08a" opacity="0.9" />
+                        <!-- Specular Glint -->
+                        <path d="M-8,-12 C-4,-16 2,-16 6,-14" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.65" />
+                        <!-- Green Calyx -->
+                        <path d="M-10,-18 L-2,-14 L0,-22 L4,-14 L12,-18 L6,-11 L-4,-11 Z" fill="#22c55e" />
                       </g>
-                      <path class="candle-smoke-wisp" d="M0,-4 Q-12,-38 10,-72 Q-12,-106 4,-140" stroke="#f1f5f9" stroke-width="3.8" fill="none" stroke-linecap="round" />
+
+                      <!-- Sliced Strawberry (Center Right) -->
+                      <g transform="translate(362, 274) rotate(16)">
+                        <path d="M0, -16 C16,-16 18,6 0,20 C-18,6 -16,-16 0,-16 Z" fill="url(#strawberryGrad)" />
+                        <ellipse cx="0" cy="2" rx="12" ry="14" fill="url(#strawberrySliceInside)" />
+                        <!-- Seed Ray Pattern -->
+                        <path d="M0,2 L-6,-4 M0,2 L6,-4 M0,2 L-7,4 M0,2 L7,4 M0,2 L0,12" stroke="#be123c" stroke-width="1.2" opacity="0.7" />
+                        <circle cx="0" cy="2" r="3" fill="#ffffff" />
+                      </g>
+
+                      <!-- Center Hero Strawberry -->
+                      <g transform="translate(298, 302) rotate(4)">
+                        <path d="M0, -20 C18,-20 22,6 0,24 C-22,6 -18,-20 0,-20 Z" fill="url(#strawberryGrad)" />
+                        <circle cx="-7" cy="-8" r="1" fill="#fef08a" />
+                        <circle cx="5" cy="-6" r="1" fill="#fef08a" />
+                        <circle cx="-4" cy="2" r="1" fill="#fef08a" />
+                        <circle cx="4" cy="6" r="1" fill="#fef08a" />
+                        <circle cx="-1" cy="12" r="0.9" fill="#fef08a" />
+                        <path d="M-10,-12 C-5,-18 4,-18 9,-14" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.75" />
+                        <path d="M-12,-20 L-2,-15 L0,-24 L4,-15 L14,-20 L7,-12 L-5,-12 Z" fill="#22c55e" />
+                      </g>
+
+                      <!-- Plump Blueberries -->
+                      <g transform="translate(202, 306)">
+                        <circle cx="0" cy="0" r="10" fill="url(#blueberryGrad)" />
+                        <circle cx="-3" cy="-3" r="2.5" fill="#ffffff" opacity="0.8" />
+                        <circle cx="1" cy="1" r="3" fill="#1e1b4b" opacity="0.6" />
+                      </g>
+                      <g transform="translate(262, 266)">
+                        <circle cx="0" cy="0" r="9" fill="url(#blueberryGrad)" />
+                        <circle cx="-2.5" cy="-2.5" r="2.2" fill="#ffffff" opacity="0.85" />
+                      </g>
+                      <g transform="translate(332, 304)">
+                        <circle cx="0" cy="0" r="10.5" fill="url(#blueberryGrad)" />
+                        <circle cx="-3" cy="-3" r="2.6" fill="#ffffff" opacity="0.8" />
+                      </g>
+                      <g transform="translate(396, 286)">
+                        <circle cx="0" cy="0" r="9.5" fill="url(#blueberryGrad)" />
+                        <circle cx="-2.5" cy="-2.5" r="2.2" fill="#ffffff" opacity="0.8" />
+                      </g>
+
+                      <!-- Mint Leaf Sprig (Right) -->
+                      <path d="M418,272 C434,260 442,246 428,240 C416,248 412,262 418,272 Z" fill="url(#mintGrad)" />
+                    </g>
+                  </g>
+
+                  <!-- 5. Five Slender Candles with Golden Holders -->
+                  <g id="cakeCandlesGroup">
+                    <!-- Candle 1 (Far Left: X=176, Y=234) -->
+                    <g class="candle-stick-unit c1" transform="translate(176, 234)">
+                      <!-- Golden holder cup -->
+                      <ellipse cx="0" cy="0" rx="9" ry="4" fill="url(#goldStandBaseGrad)" />
+                      <!-- Slender candle shaft -->
+                      <rect x="-5" y="-74" width="10" height="74" rx="3" fill="url(#candleBlush)" />
+                      <!-- Gold spiral ribbon -->
+                      <path d="M-5,-64 Q0,-61 5,-58 M-5,-46 Q0,-43 5,-40 M-5,-28 Q0,-25 5,-22 M-5,-10 Q0,-7 5,-4" stroke="url(#goldSpiralRibbon)" stroke-width="2.5" fill="none" opacity="0.9" />
+                      <!-- Wax top rim & wick -->
+                      <ellipse cx="0" cy="-74" rx="5" ry="2" fill="#fda4af" />
+                      <path d="M0,-74 Q1,-82 0,-88" stroke="#1f2937" stroke-width="2.4" stroke-linecap="round" fill="none" />
+                      <!-- Extinguished Glowing Wick Ember -->
+                      <circle cx="0" cy="-88" r="2.5" fill="url(#emberGlow)" class="wick-ember" />
                     </g>
 
-                    <!-- Candle 4 (Rightmost: 610, 140) -->
-                    <g class="cake-flame-unit u4" transform="translate(610, 140)">
-                      <circle cx="0" cy="0" r="32" fill="url(#cakeFlameAura)" class="flame-halo" />
-                      <g class="candle-flame-body" filter="url(#cakeGlowFilter)">
-                        <path d="M0,0 C-10,-12 -12,-32 0,-46 C12,-32 10,-12 0,0 Z" fill="url(#cakeFlameCore)" />
-                        <ellipse cx="0" cy="-8" rx="3.5" ry="7" fill="#ffffff" opacity="0.95" />
-                      </g>
-                      <path class="candle-smoke-wisp" d="M0,-4 Q16,-34 -10,-68 Q10,-102 -4,-136" stroke="#f1f5f9" stroke-width="3.5" fill="none" stroke-linecap="round" />
+                    <!-- Candle 2 (Center Left: X=238, Y=218) -->
+                    <g class="candle-stick-unit c2" transform="translate(238, 218)">
+                      <ellipse cx="0" cy="0" rx="9" ry="4" fill="url(#goldStandBaseGrad)" />
+                      <rect x="-5" y="-80" width="10" height="80" rx="3" fill="url(#candleIvory)" />
+                      <path d="M-5,-70 Q0,-67 5,-64 M-5,-52 Q0,-49 5,-46 M-5,-34 Q0,-31 5,-28 M-5,-16 Q0,-13 5,-10" stroke="url(#goldSpiralRibbon)" stroke-width="2.5" fill="none" opacity="0.9" />
+                      <ellipse cx="0" cy="-80" rx="5" ry="2" fill="#fff" />
+                      <path d="M0,-80 Q1,-88 0,-94" stroke="#1f2937" stroke-width="2.4" stroke-linecap="round" fill="none" />
+                      <circle cx="0" cy="-94" r="2.5" fill="url(#emberGlow)" class="wick-ember" />
                     </g>
-                  </svg>
-                </div>
+
+                    <!-- Candle 3 (Center Hero: X=300, Y=208 - Tallest) -->
+                    <g class="candle-stick-unit c3" transform="translate(300, 208)">
+                      <ellipse cx="0" cy="0" rx="9.5" ry="4.5" fill="url(#goldStandBaseGrad)" />
+                      <rect x="-5.5" y="-88" width="11" height="88" rx="3" fill="url(#candleBlush)" />
+                      <path d="M-5.5,-78 Q0,-75 5.5,-72 M-5.5,-58 Q0,-55 5.5,-52 M-5.5,-38 Q0,-35 5.5,-32 M-5.5,-18 Q0,-15 5.5,-12" stroke="url(#goldSpiralRibbon)" stroke-width="2.6" fill="none" opacity="0.9" />
+                      <ellipse cx="0" cy="-88" rx="5.5" ry="2.2" fill="#fda4af" />
+                      <path d="M0,-88 Q1,-96 0,-102" stroke="#1f2937" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                      <circle cx="0" cy="-102" r="2.6" fill="url(#emberGlow)" class="wick-ember" />
+                    </g>
+
+                    <!-- Candle 4 (Center Right: X=362, Y=218) -->
+                    <g class="candle-stick-unit c4" transform="translate(362, 218)">
+                      <ellipse cx="0" cy="0" rx="9" ry="4" fill="url(#goldStandBaseGrad)" />
+                      <rect x="-5" y="-80" width="10" height="80" rx="3" fill="url(#candleIvory)" />
+                      <path d="M-5,-70 Q0,-67 5,-64 M-5,-52 Q0,-49 5,-46 M-5,-34 Q0,-31 5,-28 M-5,-16 Q0,-13 5,-10" stroke="url(#goldSpiralRibbon)" stroke-width="2.5" fill="none" opacity="0.9" />
+                      <ellipse cx="0" cy="-80" rx="5" ry="2" fill="#fff" />
+                      <path d="M0,-80 Q1,-88 0,-94" stroke="#1f2937" stroke-width="2.4" stroke-linecap="round" fill="none" />
+                      <circle cx="0" cy="-94" r="2.5" fill="url(#emberGlow)" class="wick-ember" />
+                    </g>
+
+                    <!-- Candle 5 (Far Right: X=424, Y=234) -->
+                    <g class="candle-stick-unit c5" transform="translate(424, 234)">
+                      <ellipse cx="0" cy="0" rx="9" ry="4" fill="url(#goldStandBaseGrad)" />
+                      <rect x="-5" y="-74" width="10" height="74" rx="3" fill="url(#candleBlush)" />
+                      <path d="M-5,-64 Q0,-61 5,-58 M-5,-46 Q0,-43 5,-40 M-5,-28 Q0,-25 5,-22 M-5,-10 Q0,-7 5,-4" stroke="url(#goldSpiralRibbon)" stroke-width="2.5" fill="none" opacity="0.9" />
+                      <ellipse cx="0" cy="-74" rx="5" ry="2" fill="#fda4af" />
+                      <path d="M0,-74 Q1,-82 0,-88" stroke="#1f2937" stroke-width="2.4" stroke-linecap="round" fill="none" />
+                      <circle cx="0" cy="-88" r="2.5" fill="url(#emberGlow)" class="wick-ember" />
+                    </g>
+                  </g>
+
+                  <!-- 6. Wind Gust Animation Stream (Appears on Blow) -->
+                  <g class="cake-wind-gust" id="cakeWindGust">
+                    <path d="M40,150 Q160,130 300,120 T560,110" stroke="rgba(255,255,255,0.7)" stroke-width="3" stroke-linecap="round" stroke-dasharray="25, 40" fill="none" />
+                    <path d="M60,170 Q200,150 340,140 T540,130" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="35, 50" fill="none" />
+                  </g>
+
+                  <!-- 7. Curled Rising Smoke Wisps (Rising from 5 wicks when blown out) -->
+                  <g class="cake-smoke-layer" id="cakeSmokeLayer">
+                    <!-- Smoke 1 (C1: 176, 146) -->
+                    <path class="candle-smoke-wisp s1" d="M176,146 Q162,110 184,80 Q160,48 174,18 Q162,-10 178,-35" stroke="#f1f5f9" stroke-width="3.5" fill="none" stroke-linecap="round" />
+                    <!-- Smoke 2 (C2: 238, 124) -->
+                    <path class="candle-smoke-wisp s2" d="M238,124 Q256,92 230,62 Q258,30 236,2 Q254,-24 238,-50" stroke="#f1f5f9" stroke-width="3.6" fill="none" stroke-linecap="round" />
+                    <!-- Smoke 3 (C3: 300, 106) -->
+                    <path class="candle-smoke-wisp s3" d="M300,106 Q282,72 312,42 Q284,12 308,-18 Q286,-46 304,-75" stroke="#f1f5f9" stroke-width="3.8" fill="none" stroke-linecap="round" />
+                    <!-- Smoke 4 (C4: 362, 124) -->
+                    <path class="candle-smoke-wisp s4" d="M362,124 Q344,92 370,62 Q342,30 366,2 Q346,-24 364,-50" stroke="#f1f5f9" stroke-width="3.6" fill="none" stroke-linecap="round" />
+                    <!-- Smoke 5 (C5: 424, 146) -->
+                    <path class="candle-smoke-wisp s5" d="M424,146 Q438,110 416,80 Q440,48 426,18 Q438,-10 422,-35" stroke="#f1f5f9" stroke-width="3.5" fill="none" stroke-linecap="round" />
+                  </g>
+
+                  <!-- 8. Five Glowing Animated Candle Flames -->
+                  <g class="cake-flames-layer" id="cakeFlamesLayer">
+                    <!-- Flame 1 (C1: 176, 146) -->
+                    <g class="cake-flame-unit u1" transform="translate(176, 146)">
+                      <circle cx="0" cy="-6" r="32" fill="url(#flameHaloAura)" class="flame-halo" />
+                      <g class="candle-flame-body" filter="url(#flameGlowGlint)">
+                        <!-- Flame teardrop outer body -->
+                        <path d="M0,0 C-9,-10 -11,-26 0,-40 C11,-26 9,-10 0,0 Z" fill="url(#flameCoreGrad)" />
+                        <!-- Flame inner bright core -->
+                        <ellipse cx="0" cy="-8" rx="3.2" ry="7" fill="#ffffff" opacity="0.95" />
+                        <!-- Blue combustion root -->
+                        <ellipse cx="0" cy="-2" rx="3" ry="2" fill="#38bdf8" opacity="0.8" />
+                      </g>
+                    </g>
+
+                    <!-- Flame 2 (C2: 238, 124) -->
+                    <g class="cake-flame-unit u2" transform="translate(238, 124)">
+                      <circle cx="0" cy="-7" r="34" fill="url(#flameHaloAura)" class="flame-halo" />
+                      <g class="candle-flame-body" filter="url(#flameGlowGlint)">
+                        <path d="M0,0 C-10,-12 -12,-30 0,-44 C12,-30 10,-12 0,0 Z" fill="url(#flameCoreGrad)" />
+                        <ellipse cx="0" cy="-9" rx="3.6" ry="7.5" fill="#ffffff" opacity="0.95" />
+                        <ellipse cx="0" cy="-2" rx="3.2" ry="2" fill="#38bdf8" opacity="0.8" />
+                      </g>
+                    </g>
+
+                    <!-- Flame 3 (C3: 300, 106 - Tallest/Center) -->
+                    <g class="cake-flame-unit u3" transform="translate(300, 106)">
+                      <circle cx="0" cy="-8" r="36" fill="url(#flameHaloAura)" class="flame-halo" />
+                      <g class="candle-flame-body" filter="url(#flameGlowGlint)">
+                        <path d="M0,0 C-11,-13 -13,-34 0,-48 C13,-34 11,-13 0,0 Z" fill="url(#flameCoreGrad)" />
+                        <ellipse cx="0" cy="-10" rx="3.8" ry="8" fill="#ffffff" opacity="0.95" />
+                        <ellipse cx="0" cy="-2" rx="3.5" ry="2" fill="#38bdf8" opacity="0.8" />
+                      </g>
+                    </g>
+
+                    <!-- Flame 4 (C4: 362, 124) -->
+                    <g class="cake-flame-unit u4" transform="translate(362, 124)">
+                      <circle cx="0" cy="-7" r="34" fill="url(#flameHaloAura)" class="flame-halo" />
+                      <g class="candle-flame-body" filter="url(#flameGlowGlint)">
+                        <path d="M0,0 C-10,-12 -12,-30 0,-44 C12,-30 10,-12 0,0 Z" fill="url(#flameCoreGrad)" />
+                        <ellipse cx="0" cy="-9" rx="3.6" ry="7.5" fill="#ffffff" opacity="0.95" />
+                        <ellipse cx="0" cy="-2" rx="3.2" ry="2" fill="#38bdf8" opacity="0.8" />
+                      </g>
+                    </g>
+
+                    <!-- Flame 5 (C5: 424, 146) -->
+                    <g class="cake-flame-unit u5" transform="translate(424, 146)">
+                      <circle cx="0" cy="-6" r="32" fill="url(#flameHaloAura)" class="flame-halo" />
+                      <g class="candle-flame-body" filter="url(#flameGlowGlint)">
+                        <path d="M0,0 C-9,-10 -11,-26 0,-40 C11,-26 9,-10 0,0 Z" fill="url(#flameCoreGrad)" />
+                        <ellipse cx="0" cy="-8" rx="3.2" ry="7" fill="#ffffff" opacity="0.95" />
+                        <ellipse cx="0" cy="-2" rx="3" ry="2" fill="#38bdf8" opacity="0.8" />
+                      </g>
+                    </g>
+                  </g>
+
+                  <!-- 9. Floating Golden Sparkle Glints -->
+                  <g class="cake-sparkles-group" aria-hidden="true">
+                    <text x="145" y="130" class="cake-sparkle-star s-glint1" fill="#fef08a">✦</text>
+                    <text x="210" y="90" class="cake-sparkle-star s-glint2" fill="#fef08a">✦</text>
+                    <text x="320" y="70" class="cake-sparkle-star s-glint3" fill="#fef08a">✦</text>
+                    <text x="390" y="85" class="cake-sparkle-star s-glint4" fill="#fef08a">✦</text>
+                    <text x="455" y="130" class="cake-sparkle-star s-glint5" fill="#fef08a">✦</text>
+                  </g>
+                </svg>
               </div>
 
               <!-- Interactive Cake Ceremony Controls -->
               <div class="cake-action-area">
-                <button class="btn-starlight btn-cake-blow" id="blowCandleBtn" title="Make a wish and blow out the candles!">
-                  💨 Blow Out Candles & Make a Wish
-                </button>
+                <div class="cake-btn-row">
+                  <button class="btn-starlight btn-cake-blow" id="blowCandleBtn" title="Make a wish and blow out the candles!">
+                    🕯️ Blow Out Candles & Make a Wish
+                  </button>
+                  <button class="btn-cake-mic" id="cakeMicBtn" type="button" title="Enable microphone breath detection to blow out the candles!">
+                    <span class="mic-icon">🎤</span>
+                    <span class="mic-text">Blow with Mic</span>
+                  </button>
+                </div>
 
                 <div class="cake-wish-banner" id="cakeWishBanner">
                   ${birthdayConfig.cake.promptBefore}
@@ -447,6 +835,15 @@ class BirthdayExperience {
               </div>
 
               <div style="display: flex; gap: 14px; justify-content: center; margin-top: 24px; flex-wrap: wrap;">
+                <button class="btn-primary" style="background: rgba(255,255,255,0.15); color: #fff;" data-goto="screen-c">
+                  ← Back to Gifts
+                </button>
+                <button class="btn-primary" data-goto="screen-g">
+                  Next: Scrapbook Memories 📸 →
+                </button>
+              </div>
+            </div>
+          </section>
                 <button class="btn-primary" style="background: rgba(255,255,255,0.15); color: #fff;" data-goto="screen-c">
                   ← Back to Gifts
                 </button>
@@ -754,37 +1151,134 @@ class BirthdayExperience {
       });
     });
 
-    // Screen E-2: Candle Blowing
+    // Screen E-2: Realistic Animated Candle Ceremony
     const cakeStage = document.getElementById('cakeStage');
     const blowBtn = document.getElementById('blowCandleBtn');
-    const blowCandles = () => {
-      if (this.candlesBlown) {
-        // re-light candles with golden stardust
-        cakeStage.classList.remove('is-blown');
-        this.candlesBlown = false;
-        document.getElementById('cakeWishBanner').textContent = birthdayConfig.cake.promptBefore;
-        blowBtn.innerHTML = '💨 Blow Out Candles & Make a Wish';
-        const rect = cakeStage ? cakeStage.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight * 0.35, width: 0 };
-        this.showerPetals(rect.left + rect.width / 2, rect.top + 80, 15);
-        return;
+    const micBtn = document.getElementById('cakeMicBtn');
+    const wishBanner = document.getElementById('cakeWishBanner');
+
+    const executeBlowSequence = () => {
+      if (this.candlesBlown || this.isBlowingInProgress) return;
+      this.isBlowingInProgress = true;
+      this.stopBreathDetection();
+
+      // Phase 1: Wind gust & flame bending/extinguishing
+      if (cakeStage) cakeStage.classList.add('is-blowing');
+      if (blowBtn) {
+        blowBtn.disabled = true;
+        blowBtn.innerHTML = '💨 Blowing...';
       }
-      this.candlesBlown = true;
-      cakeStage.classList.add('is-blown');
-      document.getElementById('cakeWishBanner').innerHTML = `
-        <strong style="color: #ffd05a; font-size: 1.15em; display: block; margin-bottom: 8px; text-shadow: 0 0 16px rgba(245, 158, 11, 0.4);">${birthdayConfig.cake.promptAfter}</strong>
-        <span style="font-style: italic; color: #fffaf0;">${birthdayConfig.cake.wishNote}</span>
-      `;
-      blowBtn.innerHTML = '🔥 Relight Candles ✨';
-      const rect = cakeStage ? cakeStage.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight * 0.35, width: 0, height: 0 };
-      this.fireConfetti(rect.left + rect.width / 2, rect.top + 100);
+      if (wishBanner) {
+        wishBanner.innerHTML = `<span class="cake-wish-step blowing">${birthdayConfig.cake.promptBlowing || '💨 Making your wish...'}</span>`;
+      }
+
+      // Staggered flame extinction (over 450ms)
       setTimeout(() => {
-        this.fireConfetti(rect.left + rect.width / 2 + 50, rect.top + 80);
-      }, 250);
-      this.showerPetals(rect.left + rect.width / 2, rect.top + 120, 35);
+        if (cakeStage) {
+          cakeStage.classList.remove('is-blowing');
+          cakeStage.classList.add('is-blown');
+        }
+        this.candlesBlown = true;
+        this.isBlowingInProgress = false;
+
+        // Phase 2 & 3: Smoke wisps rise, embers glow & fade
+        // Phase 4: Celebration particles & 2-phase message reveal
+        const rect = cakeStage ? cakeStage.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight * 0.35, width: 0, height: 0 };
+        this.fireConfetti(rect.left + rect.width / 2, rect.top + 90);
+        setTimeout(() => {
+          this.fireConfetti(rect.left + rect.width / 2 + 60, rect.top + 70);
+          this.showerPetals(rect.left + rect.width / 2, rect.top + 100, 30);
+        }, 220);
+
+        // Phase 4 - Message 1
+        if (wishBanner) {
+          wishBanner.innerHTML = `
+            <div class="wish-reveal-step wish-p1">
+              <span class="wish-icon">✨</span>
+              <strong class="wish-text-main">${birthdayConfig.cake.wishMessagePhase1 || '“Your wish is now on its way to the universe. ✨”'}</strong>
+            </div>
+          `;
+        }
+
+        // Phase 4 - Message 2 (revealed after 1.8s)
+        setTimeout(() => {
+          if (this.candlesBlown && wishBanner) {
+            wishBanner.innerHTML = `
+              <div class="wish-reveal-step wish-p1">
+                <span class="wish-icon">✨</span>
+                <strong class="wish-text-main">${birthdayConfig.cake.wishMessagePhase1 || '“Your wish is now on its way to the universe. ✨”'}</strong>
+              </div>
+              <div class="wish-reveal-step wish-p2">
+                <span class="wish-heart">❤️</span>
+                <p class="wish-text-sub">${birthdayConfig.cake.wishMessagePhase2 || '“May all your beautiful dreams come true. Happy Birthday! ❤️”'}</p>
+              </div>
+            `;
+          }
+        }, 1800);
+
+        // Update button to Relight Candles
+        if (blowBtn) {
+          blowBtn.disabled = false;
+          blowBtn.innerHTML = '✨ Relight Candles';
+          blowBtn.classList.add('btn-relight-mode');
+        }
+      }, 450);
     };
 
-    if (cakeStage) cakeStage.addEventListener('click', blowCandles);
-    if (blowBtn) blowBtn.addEventListener('click', blowCandles);
+    const relightCandles = () => {
+      if (!this.candlesBlown || this.isBlowingInProgress) return;
+      this.isBlowingInProgress = true;
+
+      // Reset blown state
+      if (cakeStage) {
+        cakeStage.classList.remove('is-blown');
+        cakeStage.classList.add('is-relighting');
+      }
+      this.candlesBlown = false;
+
+      if (blowBtn) {
+        blowBtn.disabled = true;
+        blowBtn.innerHTML = '✨ Igniting...';
+        blowBtn.classList.remove('btn-relight-mode');
+      }
+
+      if (wishBanner) {
+        wishBanner.innerHTML = `<span class="cake-wish-step relighting">✨ Igniting candles with birthday stardust...</span>`;
+      }
+
+      const rect = cakeStage ? cakeStage.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight * 0.35, width: 0 };
+      this.showerPetals(rect.left + rect.width / 2, rect.top + 70, 15);
+
+      setTimeout(() => {
+        if (cakeStage) cakeStage.classList.remove('is-relighting');
+        this.isBlowingInProgress = false;
+
+        if (blowBtn) {
+          blowBtn.disabled = false;
+          blowBtn.innerHTML = '🕯️ Blow Out Candles & Make a Wish';
+        }
+
+        if (wishBanner) {
+          wishBanner.textContent = birthdayConfig.cake.promptBefore;
+        }
+      }, 700);
+    };
+
+    const handleCakeCeremonyClick = () => {
+      if (this.candlesBlown) {
+        relightCandles();
+      } else {
+        executeBlowSequence();
+      }
+    };
+
+    if (cakeStage) cakeStage.addEventListener('click', handleCakeCeremonyClick);
+    if (blowBtn) blowBtn.addEventListener('click', handleCakeCeremonyClick);
+    if (micBtn) {
+      micBtn.addEventListener('click', () => {
+        this.toggleBreathDetection(executeBlowSequence);
+      });
+    }
 
     // Screen G: Polaroid Lightbox
     document.querySelectorAll('.polaroid-card').forEach(card => {
@@ -987,6 +1481,124 @@ class BirthdayExperience {
       if (vinylDisc) vinylDisc.classList.add('is-playing');
       if (vinylDeck) vinylDeck.classList.add('is-playing');
       if (audioPlayBtn) audioPlayBtn.innerHTML = '❚❚';
+    }
+
+    // Cake scene entrance or exit cleanup
+    if (screenId === 'screen-e-cake') {
+      this.onEnterCakeScene();
+    } else {
+      this.stopBreathDetection();
+    }
+  }
+
+  onEnterCakeScene() {
+    const cakeStage = document.getElementById('cakeStage');
+    if (cakeStage && !this.candlesBlown) {
+      cakeStage.classList.add('is-entrance');
+      setTimeout(() => {
+        cakeStage.classList.remove('is-entrance');
+      }, 1200);
+    }
+  }
+
+  toggleBreathDetection(onBlowDetected) {
+    const micBtn = document.getElementById('cakeMicBtn');
+    if (this.isListeningForBlow) {
+      this.stopBreathDetection();
+      return;
+    }
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      if (micBtn) {
+        const textSpan = micBtn.querySelector('.mic-text');
+        if (textSpan) textSpan.textContent = 'Mic unavailable';
+      }
+      return;
+    }
+
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        this.micStream = stream;
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        this.audioCtx = new AudioCtx();
+        const source = this.audioCtx.createMediaStreamSource(stream);
+        this.analyser = this.audioCtx.createAnalyser();
+        this.analyser.fftSize = 256;
+        source.connect(this.analyser);
+
+        this.isListeningForBlow = true;
+        if (micBtn) {
+          micBtn.classList.add('is-listening');
+          const textSpan = micBtn.querySelector('.mic-text');
+          if (textSpan) textSpan.textContent = 'Blow into mic! 💨';
+        }
+
+        const banner = document.getElementById('cakeWishBanner');
+        if (banner && !this.candlesBlown) {
+          banner.innerHTML = `<span style="color: #67e8f9;">💨 Listening to your microphone... Blow gently into your mic to blow out the candles!</span>`;
+        }
+
+        const bufferLength = this.analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        let sustainedBlowCount = 0;
+
+        const checkBreath = () => {
+          if (!this.isListeningForBlow || this.candlesBlown) return;
+
+          this.analyser.getByteFrequencyData(dataArray);
+
+          // Calculate average amplitude across airflow frequencies (wind/breath noise)
+          let sum = 0;
+          for (let i = 4; i < bufferLength; i++) {
+            sum += dataArray[i];
+          }
+          const avg = sum / (bufferLength - 4);
+
+          // Threshold for breath sound
+          if (avg > 38) {
+            sustainedBlowCount++;
+            if (sustainedBlowCount >= 3) {
+              this.stopBreathDetection();
+              if (onBlowDetected) onBlowDetected();
+              return;
+            }
+          } else {
+            sustainedBlowCount = Math.max(0, sustainedBlowCount - 1);
+          }
+
+          this.micRafId = requestAnimationFrame(checkBreath);
+        };
+
+        this.micRafId = requestAnimationFrame(checkBreath);
+      })
+      .catch(err => {
+        console.warn('Microphone permission not granted:', err);
+        if (micBtn) {
+          const textSpan = micBtn.querySelector('.mic-text');
+          if (textSpan) textSpan.textContent = 'Mic denied (tap button)';
+        }
+      });
+  }
+
+  stopBreathDetection() {
+    this.isListeningForBlow = false;
+    if (this.micRafId) {
+      cancelAnimationFrame(this.micRafId);
+      this.micRafId = null;
+    }
+    if (this.micStream) {
+      this.micStream.getTracks().forEach(t => t.stop());
+      this.micStream = null;
+    }
+    if (this.audioCtx && this.audioCtx.state !== 'closed') {
+      this.audioCtx.close().catch(() => {});
+      this.audioCtx = null;
+    }
+    const micBtn = document.getElementById('cakeMicBtn');
+    if (micBtn) {
+      micBtn.classList.remove('is-listening');
+      const textSpan = micBtn.querySelector('.mic-text');
+      if (textSpan) textSpan.textContent = 'Blow with Mic';
     }
   }
 

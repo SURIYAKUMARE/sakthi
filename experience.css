@@ -1034,209 +1034,411 @@
 
 .cake-interactive-stage {
   position: relative;
-  width: min(340px, 86vw);
-  height: min(340px, 86vw);
-  margin: 0 auto 20px;
+  width: min(440px, 90vw);
+  height: min(450px, 92vw);
+  max-width: 440px;
+  margin: 0 auto 18px;
   cursor: pointer;
-  border-radius: 26px;
-  animation: cakeBreeze 8s ease-in-out infinite;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: cakeGentleFloat 6s ease-in-out infinite;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-@keyframes cakeBreeze {
+@keyframes cakeGentleFloat {
   0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-5px) rotate(0.6deg); }
+  50% { transform: translateY(-7px) rotate(0.4deg); }
 }
 
 .cake-interactive-stage:hover {
-  transform: scale(1.025) translateY(-4px);
+  transform: scale(1.025) translateY(-5px);
 }
 
-/* Luxury Realistic Cake Photo Frame */
-.cake-showcase-frame {
-  position: relative;
+.cake-vector-scene {
   width: 100%;
   height: 100%;
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow:
-    0 24px 60px -10px rgba(25, 2, 7, 0.85),
-    0 0 50px rgba(245, 158, 11, 0.25);
-  border: 1px solid rgba(255, 215, 170, 0.4);
-  background: #0d0205;
-}
-
-.cake-real-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  overflow: visible;
   display: block;
-  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 20px 45px rgba(20, 2, 6, 0.75));
 }
 
-.cake-showcase-frame::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  box-shadow: inset 0 0 35px rgba(15, 1, 4, 0.65);
-  pointer-events: none;
-  z-index: 2;
+/* Entrance Animation for Cake Stage */
+.cake-interactive-stage.is-entrance {
+  animation: cakeEntrancePop 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Ambient Pulsing Warm Candlelight on Cake Top */
+@keyframes cakeEntrancePop {
+  0% { opacity: 0; transform: scale(0.9) translateY(24px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Ambient Candlelight Reflection on Cake Top */
 .cake-candle-ambient-glow {
-  position: absolute;
-  top: 5%;
-  left: 25%;
-  width: 50%;
-  height: 30%;
-  background: radial-gradient(ellipse at 50% 50%, rgba(254, 240, 138, 0.4) 0%, rgba(245, 158, 11, 0.18) 50%, transparent 75%);
-  pointer-events: none;
-  z-index: 3;
-  animation: ambientCandleGlow 2s ease-in-out infinite alternate;
+  transform-origin: 300px 275px;
+  animation: ambientCandleFlicker 2.2s ease-in-out infinite alternate;
   transition: opacity 0.4s ease;
 }
 
-@keyframes ambientCandleGlow {
-  0% { opacity: 0.65; transform: scale(0.96); }
-  100% { opacity: 1; transform: scale(1.05); }
+@keyframes ambientCandleFlicker {
+  0% { opacity: 0.75; transform: scale(0.97); }
+  50% { opacity: 1; transform: scale(1.04); }
+  100% { opacity: 0.85; transform: scale(1); }
 }
 
 .cake-interactive-stage.is-blown .cake-candle-ambient-glow {
   opacity: 0;
 }
 
-/* Sparkle Glints on Gold Leaf & Berries */
-.cake-sparkle-layer {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 4;
-}
-
-.cake-glint {
-  position: absolute;
-  color: #fef08a;
-  font-size: 14px;
-  text-shadow: 0 0 6px #fff, 0 0 12px #eab308;
-  animation: cakeGlintFlicker 3.2s ease-in-out infinite;
-}
-
-.cake-glint.g1 { top: 35%; left: 28%; animation-delay: 0.2s; }
-.cake-glint.g2 { top: 48%; left: 72%; animation-delay: 1.1s; font-size: 16px; }
-.cake-glint.g3 { top: 62%; left: 38%; animation-delay: 1.8s; }
-.cake-glint.g4 { top: 68%; left: 62%; animation-delay: 2.4s; font-size: 15px; }
-
-@keyframes cakeGlintFlicker {
-  0%, 100% { opacity: 0.2; transform: scale(0.7) rotate(0deg); }
-  50% { opacity: 1; transform: scale(1.3) rotate(45deg); }
-}
-
-/* SVG Flame & Smoke Physics Overlay */
-.cake-flames-overlay {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 6;
-  overflow: visible;
-}
-
-/* Dancing Organic Candle Flames */
+/* Five Animated Candle Flames with Multi-Layered Physics */
 .candle-flame-body {
   transform-origin: 0 0;
-  animation: candleFlameFlickerOrganic 1.3s ease-in-out infinite alternate;
 }
 
-.cake-flame-unit.u1 .candle-flame-body { animation-delay: 0.1s; animation-duration: 1.25s; }
-.cake-flame-unit.u2 .candle-flame-body { animation-delay: 0.4s; animation-duration: 1.4s; }
-.cake-flame-unit.u3 .candle-flame-body { animation-delay: 0.7s; animation-duration: 1.15s; }
-.cake-flame-unit.u4 .candle-flame-body { animation-delay: 0.25s; animation-duration: 1.35s; }
-
-@keyframes candleFlameFlickerOrganic {
-  0% { transform: scale(1) rotate(-1.5deg); filter: drop-shadow(0 0 6px #ffd05a); }
-  35% { transform: scale(1.06, 0.95) rotate(2deg); filter: drop-shadow(0 0 12px #f59e0b); }
-  70% { transform: scale(0.96, 1.04) rotate(-2deg); filter: drop-shadow(0 0 8px #ffd05a); }
-  100% { transform: scale(1.02, 0.98) rotate(1deg); filter: drop-shadow(0 0 10px #f59e0b); }
+.cake-flame-unit.u1 .candle-flame-body {
+  animation: flameFlickerOrganic1 1.4s ease-in-out infinite alternate;
+}
+.cake-flame-unit.u2 .candle-flame-body {
+  animation: flameFlickerOrganic2 1.6s ease-in-out infinite alternate 0.15s;
+}
+.cake-flame-unit.u3 .candle-flame-body {
+  animation: flameFlickerOrganic3 1.35s ease-in-out infinite alternate 0.08s;
+}
+.cake-flame-unit.u4 .candle-flame-body {
+  animation: flameFlickerOrganic4 1.55s ease-in-out infinite alternate 0.22s;
+}
+.cake-flame-unit.u5 .candle-flame-body {
+  animation: flameFlickerOrganic5 1.45s ease-in-out infinite alternate 0.12s;
 }
 
+@keyframes flameFlickerOrganic1 {
+  0% { transform: scale(1, 1) skewX(0deg) rotate(-1.5deg); }
+  40% { transform: scale(1.05, 0.95) skewX(2.5deg) rotate(2deg); }
+  75% { transform: scale(0.96, 1.04) skewX(-1.5deg) rotate(-2deg); }
+  100% { transform: scale(1.02, 0.98) skewX(1deg) rotate(1deg); }
+}
+
+@keyframes flameFlickerOrganic2 {
+  0% { transform: scale(0.98, 1.02) skewX(1deg) rotate(1deg); }
+  35% { transform: scale(1.04, 0.96) skewX(-2deg) rotate(-2deg); }
+  70% { transform: scale(0.97, 1.03) skewX(2deg) rotate(1.5deg); }
+  100% { transform: scale(1.02, 0.99) skewX(-1deg) rotate(-1deg); }
+}
+
+@keyframes flameFlickerOrganic3 {
+  0% { transform: scale(1, 1) rotate(0deg); }
+  30% { transform: scale(1.07, 0.94) skewX(1.8deg) rotate(2.5deg); }
+  65% { transform: scale(0.95, 1.05) skewX(-2deg) rotate(-2deg); }
+  100% { transform: scale(1.03, 0.97) skewX(1deg) rotate(1deg); }
+}
+
+@keyframes flameFlickerOrganic4 {
+  0% { transform: scale(1.02, 0.98) skewX(-1deg) rotate(-1deg); }
+  45% { transform: scale(0.96, 1.04) skewX(2deg) rotate(2deg); }
+  80% { transform: scale(1.05, 0.95) skewX(-1.5deg) rotate(-1.5deg); }
+  100% { transform: scale(1, 1) skewX(0.5deg) rotate(0.5deg); }
+}
+
+@keyframes flameFlickerOrganic5 {
+  0% { transform: scale(0.97, 1.03) skewX(1.5deg) rotate(1.5deg); }
+  50% { transform: scale(1.06, 0.94) skewX(-2deg) rotate(-2deg); }
+  85% { transform: scale(0.99, 1.01) skewX(1.2deg) rotate(1deg); }
+  100% { transform: scale(1.02, 0.98) skewX(-1deg) rotate(-0.5deg); }
+}
+
+/* Warm Flame Halo Glows */
 .flame-halo {
-  animation: flameHaloBreathe 2s ease-in-out infinite alternate;
+  animation: flameHaloBreathe 2.4s ease-in-out infinite alternate;
+  transform-origin: 0 -7px;
 }
 
 @keyframes flameHaloBreathe {
-  0% { transform: scale(0.9); opacity: 0.7; }
-  100% { transform: scale(1.1); opacity: 1; }
+  0% { transform: scale(0.88); opacity: 0.7; }
+  100% { transform: scale(1.12); opacity: 1; }
 }
 
-/* Blown state: Extinguish Flames with Realistic physics */
+/* Staggered Entrance Ignition */
+.cake-interactive-stage.is-entrance .cake-flame-unit.u1 { animation: flameIgniteStagger 0.4s ease-out 0.15s both; }
+.cake-interactive-stage.is-entrance .cake-flame-unit.u2 { animation: flameIgniteStagger 0.4s ease-out 0.3s both; }
+.cake-interactive-stage.is-entrance .cake-flame-unit.u3 { animation: flameIgniteStagger 0.4s ease-out 0.45s both; }
+.cake-interactive-stage.is-entrance .cake-flame-unit.u4 { animation: flameIgniteStagger 0.4s ease-out 0.6s both; }
+.cake-interactive-stage.is-entrance .cake-flame-unit.u5 { animation: flameIgniteStagger 0.4s ease-out 0.75s both; }
+
+@keyframes flameIgniteStagger {
+  0% { opacity: 0; transform: scale(0.2) translate(0, 10px); }
+  65% { opacity: 1; transform: scale(1.25) translate(0, -3px); }
+  100% { opacity: 1; transform: scale(1) translate(0, 0); }
+}
+
+/* Phase 1 — Blowing Gust Effect */
+.cake-wind-gust {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cake-interactive-stage.is-blowing .cake-wind-gust {
+  animation: windGustStream 0.45s ease-out forwards;
+}
+
+@keyframes windGustStream {
+  0% { opacity: 0; stroke-dashoffset: 80; }
+  40% { opacity: 0.9; }
+  100% { opacity: 0; stroke-dashoffset: -120; }
+}
+
+.cake-interactive-stage.is-blowing .candle-flame-body {
+  animation: flameBlowBend 0.45s cubic-bezier(0.2, 0.8, 0.3, 1) forwards !important;
+}
+
+@keyframes flameBlowBend {
+  0% { transform: scale(1) rotate(0deg); }
+  40% { transform: scale(1.3, 0.55) rotate(38deg) skewX(26deg) translate(8px, -4px); opacity: 0.9; }
+  100% { transform: scale(0.1) rotate(52deg) skewX(35deg) translate(18px, -8px); opacity: 0; }
+}
+
+/* Phase 2 & 3 — Blown State: Flames Off, Smoke Wisps Rising, Wick Embers */
 .cake-interactive-stage.is-blown .candle-flame-body {
-  animation: flameExtinguish 0.35s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 .cake-interactive-stage.is-blown .flame-halo {
   opacity: 0;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.3s ease;
 }
 
-@keyframes flameExtinguish {
-  0% { transform: scale(1) rotate(0deg); opacity: 1; }
-  40% { transform: scale(1.3, 0.6) rotate(35deg) translate(8px, -4px); opacity: 0.9; }
-  100% { transform: scale(0.05) rotate(50deg) translate(20px, -10px); opacity: 0; }
-}
-
-/* Smoke wisps drifting after blowing */
-.candle-smoke-wisp {
+/* Glowing Wick Embers after Blowing */
+.wick-ember {
   opacity: 0;
   transform-origin: 0 0;
 }
 
-.cake-interactive-stage.is-blown .candle-smoke-wisp {
-  opacity: 0.85;
-  animation: smokeCurlRise 2.2s cubic-bezier(0.12, 0.8, 0.25, 1) forwards;
+.cake-interactive-stage.is-blown .wick-ember {
+  animation: wickEmberFade 2s ease-out forwards;
 }
 
-.cake-interactive-stage.is-blown .u1 .candle-smoke-wisp { animation-delay: 0.05s; }
-.cake-interactive-stage.is-blown .u2 .candle-smoke-wisp { animation-delay: 0.12s; }
-.cake-interactive-stage.is-blown .u3 .candle-smoke-wisp { animation-delay: 0.08s; }
-.cake-interactive-stage.is-blown .u4 .candle-smoke-wisp { animation-delay: 0.15s; }
+@keyframes wickEmberFade {
+  0% { opacity: 1; transform: scale(1.35); }
+  35% { opacity: 0.85; transform: scale(1.1); }
+  70% { opacity: 0.35; transform: scale(0.8); }
+  100% { opacity: 0; transform: scale(0.5); }
+}
+
+/* Curled Smoke Wisps Rising */
+.candle-smoke-wisp {
+  opacity: 0;
+  transform-origin: 0 0;
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+}
+
+.cake-interactive-stage.is-blown .candle-smoke-wisp {
+  animation: smokeCurlRise 2.4s cubic-bezier(0.15, 0.8, 0.25, 1) forwards;
+}
+
+.cake-interactive-stage.is-blown .s1 { animation-delay: 0.05s; }
+.cake-interactive-stage.is-blown .s2 { animation-delay: 0.12s; }
+.cake-interactive-stage.is-blown .s3 { animation-delay: 0.18s; }
+.cake-interactive-stage.is-blown .s4 { animation-delay: 0.24s; }
+.cake-interactive-stage.is-blown .s5 { animation-delay: 0.3s; }
 
 @keyframes smokeCurlRise {
-  0% { opacity: 0; transform: translateY(0) scale(0.3) rotate(0deg); stroke-width: 3.5; }
-  25% { opacity: 0.85; transform: translateY(-20px) scale(0.7) rotate(6deg); }
-  65% { opacity: 0.55; transform: translateY(-55px) scale(1.3) rotate(-10deg); stroke-width: 2.2; }
-  100% { opacity: 0; transform: translateY(-90px) scale(1.9) rotate(16deg); stroke-width: 1.2; }
+  0% {
+    opacity: 0;
+    stroke-dashoffset: 200;
+    transform: translateY(0) scale(0.4) rotate(0deg);
+    stroke-width: 4px;
+  }
+  20% {
+    opacity: 0.85;
+    stroke-dashoffset: 130;
+    transform: translateY(-16px) scale(0.7) rotate(5deg);
+    stroke-width: 3.5px;
+  }
+  60% {
+    opacity: 0.5;
+    stroke-dashoffset: 40;
+    transform: translateY(-50px) scale(1.3) rotate(-8deg);
+    stroke-width: 2.4px;
+  }
+  100% {
+    opacity: 0;
+    stroke-dashoffset: 0;
+    transform: translateY(-85px) scale(1.8) rotate(14deg);
+    stroke-width: 1.2px;
+  }
 }
 
+/* Phase 5 — Relighting Animation */
+.cake-interactive-stage.is-relighting .candle-smoke-wisp {
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+.cake-interactive-stage.is-relighting .cake-flame-unit.u1 { animation: flameIgniteStagger 0.35s ease-out 0.05s both; }
+.cake-interactive-stage.is-relighting .cake-flame-unit.u2 { animation: flameIgniteStagger 0.35s ease-out 0.14s both; }
+.cake-interactive-stage.is-relighting .cake-flame-unit.u3 { animation: flameIgniteStagger 0.35s ease-out 0.23s both; }
+.cake-interactive-stage.is-relighting .cake-flame-unit.u4 { animation: flameIgniteStagger 0.35s ease-out 0.32s both; }
+.cake-interactive-stage.is-relighting .cake-flame-unit.u5 { animation: flameIgniteStagger 0.35s ease-out 0.41s both; }
+
+/* Floating Sparkle Glints */
+.cake-sparkle-star {
+  font-size: 14px;
+  text-shadow: 0 0 6px #ffffff, 0 0 12px #eab308;
+  animation: cakeStarGlint 3s ease-in-out infinite;
+  transition: opacity 0.4s ease;
+}
+
+.s-glint1 { animation-delay: 0.2s; }
+.s-glint2 { animation-delay: 0.9s; font-size: 16px; }
+.s-glint3 { animation-delay: 1.6s; font-size: 15px; }
+.s-glint4 { animation-delay: 2.2s; font-size: 13px; }
+.s-glint5 { animation-delay: 2.7s; }
+
+@keyframes cakeStarGlint {
+  0%, 100% { opacity: 0.3; transform: scale(0.8) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.25) rotate(45deg); }
+}
+
+.cake-interactive-stage.is-blown .cake-sparkles-group {
+  opacity: 0;
+}
+
+/* Ceremony Controls & Buttons */
 .cake-action-area {
-  margin-top: 14px;
+  margin-top: 10px;
+}
+
+.cake-btn-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
 }
 
 .btn-cake-blow {
-  padding: 14px 34px !important;
-  font-size: clamp(15px, 3.2vw, 18px) !important;
+  padding: 13px 30px !important;
+  font-size: clamp(15px, 3.2vw, 17px) !important;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
+.btn-cake-blow.btn-relight-mode {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.35) 0%, rgba(225, 29, 72, 0.45) 100%) !important;
+  border-color: rgba(251, 191, 36, 0.8) !important;
+  color: #fef3c7 !important;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.35) !important;
+}
+
+.btn-cake-blow.btn-relight-mode:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 30px rgba(245, 158, 11, 0.5) !important;
+}
+
+/* Optional Microphone Breath Toggle Button */
+.btn-cake-mic {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 215, 170, 0.4);
+  color: #fffaf0;
+  border-radius: 999px;
+  padding: 11px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.25s ease;
+}
+
+.btn-cake-mic:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(251, 191, 36, 0.7);
+  transform: translateY(-2px);
+}
+
+.btn-cake-mic.is-listening {
+  background: rgba(6, 182, 212, 0.28);
+  border-color: rgba(103, 232, 249, 0.85);
+  color: #cffafe;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.45);
+  animation: micPulseGlow 1.4s ease-in-out infinite;
+}
+
+@keyframes micPulseGlow {
+  0%, 100% { box-shadow: 0 0 12px rgba(6, 182, 212, 0.35); }
+  50% { box-shadow: 0 0 24px rgba(6, 182, 212, 0.65); }
+}
+
+/* Wish Banner & Multi-Phase Messages */
 .cake-wish-banner {
-  background: rgba(45, 6, 13, 0.75);
+  background: rgba(45, 6, 13, 0.8);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 215, 170, 0.3);
+  border: 1px solid rgba(255, 215, 170, 0.35);
   border-radius: 18px;
-  padding: 18px 26px;
-  margin-top: 16px;
-  font-size: clamp(16px, 3.4vw, 19px);
+  padding: 18px 24px;
+  margin-top: 10px;
+  font-size: clamp(15px, 3.2vw, 18px);
   color: #fff0f3;
-  line-height: 1.5;
+  line-height: 1.6;
   transition: all 0.4s ease;
-  box-shadow: 0 8px 30px rgba(15, 1, 4, 0.4);
+  box-shadow: 0 10px 32px rgba(15, 1, 4, 0.5);
+  min-height: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .cake-interactive-stage.is-blown + .cake-action-area .cake-wish-banner {
-  border-color: rgba(245, 200, 140, 0.65);
-  box-shadow: 0 0 35px rgba(245, 158, 11, 0.35);
+  border-color: rgba(245, 200, 140, 0.75);
+  box-shadow: 0 0 40px rgba(245, 158, 11, 0.35), 0 12px 35px rgba(15, 1, 4, 0.6);
+}
+
+.cake-wish-step {
+  display: block;
+}
+
+.cake-wish-step.blowing,
+.cake-wish-step.relighting {
+  color: #fef08a;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.wish-reveal-step {
+  animation: wishFadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes wishFadeIn {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.wish-p1 {
+  color: #ffd05a;
+  font-size: 1.12em;
+  text-shadow: 0 0 14px rgba(245, 158, 11, 0.4);
+  margin-bottom: 6px;
+}
+
+.wish-p2 {
+  color: #ffe4e6;
+  font-style: italic;
+  font-size: 1.05em;
+  margin-top: 4px;
+}
+
+.wish-heart {
+  color: #f43f5e;
+  margin-right: 4px;
 }
 
 /* ============================================================
