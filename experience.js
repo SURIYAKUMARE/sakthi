@@ -952,15 +952,30 @@ class BirthdayExperience {
           <section class="exp-screen" id="screen-h">
             <div class="vinyl-stage">
               <h1 class="vinyl-title">${birthdayConfig.vinylScene.title}</h1>
-              <p class="vinyl-subtitle">${birthdayConfig.vinylScene.trackTitle}</p>
+              <p class="vinyl-subtitle" id="vinylTrackSub">${birthdayConfig.vinylScene.trackTitle}</p>
+
+              <!-- Track Switcher Tabs -->
+              <div class="vinyl-track-tabs">
+                <button class="vinyl-tab-btn is-active" id="tabTrackKeerthi" data-track="keerthi_song" type="button">
+                  <span class="tab-star">🌟</span>
+                  <span>இனிய பிறந்தநாள் கீர்த்தி</span>
+                  <span class="tab-tag">Dedicated Song ♥</span>
+                </button>
+                <button class="vinyl-tab-btn" id="tabTrackSidu" data-track="sidu_sidu" type="button">
+                  <span class="tab-note">🎶</span>
+                  <span>Sidu Sidu (Romeo)</span>
+                </button>
+              </div>
 
               <!-- Vinyl Record Deck -->
               <div class="vinyl-deck" id="vinylDeck">
                 <div class="vinyl-disc" id="vinylDisc" role="button" tabindex="0" title="Tap to spin & play">
-                  <div class="vinyl-label">
+                  <div class="vinyl-groove-rings"></div>
+                  <div class="vinyl-label" id="vinylDiscLabel">
                     <div class="vinyl-center-hole"></div>
-                    <span class="vinyl-label-title">SIDU SIDU</span>
-                    <span class="vinyl-label-sub">Romeo (0:38)</span>
+                    <span class="vinyl-label-title" id="vinylLabelTitle">இனிய பிறந்தநாள் கீர்த்தி</span>
+                    <span class="vinyl-label-sub" id="vinylLabelSub">Sakthi Narayanan ♥</span>
+                    <span class="vinyl-label-badge" id="vinylLabelBadge">Special 33⅓ RPM</span>
                   </div>
                 </div>
 
@@ -969,6 +984,16 @@ class BirthdayExperience {
                   <div class="tonearm-bar"></div>
                   <div class="tonearm-head"></div>
                 </div>
+              </div>
+
+              <!-- Audio Timeline & Seek Bar -->
+              <div class="vinyl-timeline-bar" id="vinylTimelineWrap">
+                <span class="timeline-time" id="vinylTimeCurrent">0:00</span>
+                <div class="timeline-track" id="vinylTimelineTrack" role="slider" aria-label="Seek track position" tabindex="0">
+                  <div class="timeline-fill" id="vinylTimelineFill"></div>
+                  <div class="timeline-thumb" id="vinylTimelineThumb"></div>
+                </div>
+                <span class="timeline-time" id="vinylTimeTotal">3:54</span>
               </div>
 
               <!-- Audio Controls -->
@@ -982,6 +1007,27 @@ class BirthdayExperience {
                 <button class="vinyl-ctrl-btn" id="audioConfettiBtn" title="Celebrate Confetti!">
                   🎉
                 </button>
+              </div>
+
+              <!-- Lyrics Card Accordion -->
+              <div class="vinyl-lyrics-card">
+                <button class="lyrics-toggle-btn" id="lyricsToggleBtn" type="button">
+                  <span class="lyrics-toggle-icon">📜</span>
+                  <span>View Lyrics • பாடல் வரிகள்</span>
+                  <span class="lyrics-arrow" id="lyricsArrow">▼</span>
+                </button>
+                <div class="lyrics-drawer" id="lyricsDrawer">
+                  <div class="lyrics-content">
+                    <h3 class="lyrics-title">${birthdayConfig.vinylScene.lyrics.title}</h3>
+                    <p class="lyrics-author">${birthdayConfig.vinylScene.lyrics.author}</p>
+                    ${birthdayConfig.vinylScene.lyrics.sections.map(sec => `
+                      <div class="lyrics-section">
+                        <h4 class="lyrics-sec-header">${sec.label}</h4>
+                        ${sec.lines.map(line => `<p class="lyrics-line">${line}</p>`).join('')}
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
               </div>
 
               <div class="vinyl-closing-card">
@@ -1338,12 +1384,105 @@ class BirthdayExperience {
       }
     });
 
-    // Screen H: Vinyl Controls
+    // Screen H: Vinyl Controls & Multi-Track Manager
     const vinylDisc = document.getElementById('vinylDisc');
     const audioPlayBtn = document.getElementById('audioPlayBtn');
     const audioMuteBtn = document.getElementById('audioMuteBtn');
     const audioConfettiBtn = document.getElementById('audioConfettiBtn');
     const vinylDeck = document.getElementById('vinylDeck');
+    const tabKeerthi = document.getElementById('tabTrackKeerthi');
+    const tabSidu = document.getElementById('tabTrackSidu');
+    const vinylLabelTitle = document.getElementById('vinylLabelTitle');
+    const vinylLabelSub = document.getElementById('vinylLabelSub');
+    const vinylLabelBadge = document.getElementById('vinylLabelBadge');
+    const vinylTrackSub = document.getElementById('vinylTrackSub');
+    const timeCur = document.getElementById('vinylTimeCurrent');
+    const timeTot = document.getElementById('vinylTimeTotal');
+    const timeFill = document.getElementById('vinylTimelineFill');
+    const timeThumb = document.getElementById('vinylTimelineThumb');
+    const timelineTrack = document.getElementById('vinylTimelineTrack');
+    const lyricsToggleBtn = document.getElementById('lyricsToggleBtn');
+    const lyricsDrawer = document.getElementById('lyricsDrawer');
+    const lyricsArrow = document.getElementById('lyricsArrow');
+
+    const formatSec = (sec) => {
+      if (isNaN(sec) || sec < 0) return '0:00';
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m}:${s < 10 ? '0' : ''}${s}`;
+    };
+
+    const updateTrackUI = (trackId) => {
+      if (trackId === 'keerthi_song') {
+        if (tabKeerthi) tabKeerthi.classList.add('is-active');
+        if (tabSidu) tabSidu.classList.remove('is-active');
+        if (vinylLabelTitle) vinylLabelTitle.textContent = 'இனிய பிறந்தநாள் கீர்த்தி';
+        if (vinylLabelSub) vinylLabelSub.textContent = 'Sakthi Narayanan ♥';
+        if (vinylLabelBadge) vinylLabelBadge.textContent = 'Dedicated 33⅓ RPM';
+        if (vinylTrackSub) vinylTrackSub.textContent = 'இனிய பிறந்தநாள் கீர்த்தி — Sakthi Narayanan';
+        const pillTitle = document.querySelector('.music-pill-title');
+        if (pillTitle) pillTitle.textContent = '♫ இனிய பிறந்தநாள் கீர்த்தி';
+      } else {
+        if (tabKeerthi) tabKeerthi.classList.remove('is-active');
+        if (tabSidu) tabSidu.classList.add('is-active');
+        if (vinylLabelTitle) vinylLabelTitle.textContent = 'SIDU SIDU';
+        if (vinylLabelSub) vinylLabelSub.textContent = 'Romeo (0:38)';
+        if (vinylLabelBadge) vinylLabelBadge.textContent = 'Background Melody';
+        if (vinylTrackSub) vinylTrackSub.textContent = 'Sidu Sidu (Romeo) — Kapil Kapilan';
+        const pillTitle = document.querySelector('.music-pill-title');
+        if (pillTitle) pillTitle.textContent = '♫ Sidu Sidu (Romeo)';
+      }
+    };
+
+    if (tabKeerthi) {
+      tabKeerthi.addEventListener('click', () => {
+        romanticAudio.selectTrack('keerthi_song', true);
+        updateTrackUI('keerthi_song');
+        this.fireConfetti(window.innerWidth / 2, window.innerHeight * 0.4);
+      });
+    }
+
+    if (tabSidu) {
+      tabSidu.addEventListener('click', () => {
+        romanticAudio.selectTrack('sidu_sidu', true);
+        updateTrackUI('sidu_sidu');
+      });
+    }
+
+    // Toggle lyrics drawer
+    if (lyricsToggleBtn && lyricsDrawer) {
+      lyricsToggleBtn.addEventListener('click', () => {
+        const isOpen = lyricsDrawer.classList.toggle('is-open');
+        if (lyricsArrow) lyricsArrow.textContent = isOpen ? '▲' : '▼';
+        lyricsToggleBtn.classList.toggle('is-active', isOpen);
+      });
+    }
+
+    // Timeline seeking
+    if (timelineTrack) {
+      timelineTrack.addEventListener('click', (e) => {
+        const rect = timelineTrack.getBoundingClientRect();
+        const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        if (romanticAudio.activeTrack === 'keerthi_song') {
+          const dur = romanticAudio.localAudio && romanticAudio.localAudio.duration ? romanticAudio.localAudio.duration : 234;
+          romanticAudio.seek(ratio * dur);
+        } else {
+          romanticAudio.seek(38 + ratio * 200);
+        }
+      });
+    }
+
+    // Subscribe to time updates
+    romanticAudio.onTimeUpdate(({ currentTime, duration, percent }) => {
+      if (timeCur) timeCur.textContent = formatSec(currentTime);
+      if (timeTot && duration > 0) timeTot.textContent = formatSec(duration);
+      if (timeFill) timeFill.style.width = `${percent}%`;
+      if (timeThumb) timeThumb.style.left = `${percent}%`;
+    });
+
+    romanticAudio.onTrackChange((trackId) => {
+      updateTrackUI(trackId);
+    });
 
     const togglePlayback = () => {
       const playing = romanticAudio.toggle();
@@ -1362,6 +1501,7 @@ class BirthdayExperience {
       audioMuteBtn.addEventListener('click', () => {
         const muted = romanticAudio.toggleMute();
         audioMuteBtn.innerHTML = muted ? '🔕' : '🔔';
+        if (musicPillMuteBtn) musicPillMuteBtn.innerHTML = muted ? '🔕' : '🔔';
       });
     }
 
@@ -1472,9 +1612,9 @@ class BirthdayExperience {
       }, 500);
     }
 
-    // Auto-spin vinyl on entering screen H
-    if (screenId === 'screen-h' && !romanticAudio.isPlaying) {
-      romanticAudio.start();
+    // Auto-spin vinyl on entering screen H and play dedicated song
+    if (screenId === 'screen-h') {
+      romanticAudio.selectTrack('keerthi_song', true);
       const vinylDisc = document.getElementById('vinylDisc');
       const vinylDeck = document.getElementById('vinylDeck');
       const audioPlayBtn = document.getElementById('audioPlayBtn');

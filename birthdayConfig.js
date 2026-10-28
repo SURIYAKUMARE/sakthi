@@ -209,17 +209,106 @@ export const birthdayConfig = {
 
   // Screen H: Final Vinyl Record & Music Screen
   vinylScene: {
-    title: "Our Soundtrack",
-    trackTitle: "Sidu Sidu (Romeo) — Kapil Kapilan",
-    artist: "For Krithika with Love",
-    youtube: {
-      videoId: "Dyt1jelmjY0",
-      startTime: 38, // starts at 0:38
-      autoplay: true,
+    title: "Our Special Birthday Soundtrack",
+    trackTitle: "இனிய பிறந்தநாள் கீர்த்தி — Sakthi Narayanan",
+    artist: "A Heartfelt Song Dedicated to Keerthi ♥",
+    audioSrc: "/audio/keerthi_birthday_song.mp3",
+    currentTrackId: "keerthi_song",
+    tracks: [
+      {
+        id: "keerthi_song",
+        title: "இனிய பிறந்தநாள் கீர்த்தி",
+        artist: "Sakthi Narayanan",
+        badge: "Special Dedicated Song ♥",
+        type: "audio",
+        src: "/audio/keerthi_birthday_song.mp3",
+        label: "இனிய பிறந்தநாள் கீர்த்தி",
+        sublabel: "Sakthi Narayanan ♥",
+      },
+      {
+        id: "sidu_sidu",
+        title: "Sidu Sidu (Romeo)",
+        artist: "Kapil Kapilan",
+        badge: "Background Melody",
+        type: "youtube",
+        videoId: "Dyt1jelmjY0",
+        startTime: 38,
+        label: "SIDU SIDU",
+        sublabel: "Romeo (0:38)",
+      },
+    ],
+    lyrics: {
+      title: "பாடல் வரிகள் (Lyrics)",
+      author: "வரிகள் & குரல்: Sakthi Narayanan",
+      sections: [
+        {
+          label: "அறிமுகம் (Intro)",
+          lines: [
+            "இறைவன் தந்த அழகான வரம்,",
+            "என் வாழ்வில் நீ வந்த தருணம்,",
+            "வார்த்தைகள் தோற்கும் உன் அழகில்,",
+            "கவிதையாய் மாறினேன் உன் நினைவில்.",
+          ],
+        },
+        {
+          label: "சரணம் 1 (Verse 1)",
+          lines: [
+            "கீர்த்தி... உன் பெயர் சொன்னாலே,",
+            "என் மனம் அமைதியில் பூக்குதே.",
+            "உலகத்தில் யார் இருந்தாலும்,",
+            "என் மனம் உன்னையே தேடுதே.",
+            "உன் சிரிப்பில் என் சந்தோஷம்,",
+            "உன் பேச்சில் என் நிம்மதி,",
+            "எத்தனை உறவுகள் இருந்தாலும்,",
+            "நீயே என் மனதின் முதல் விருப்பம்.",
+          ],
+        },
+        {
+          label: "பல்லவி (Chorus)",
+          lines: [
+            "இனிய பிறந்தநாள் கீர்த்தி,",
+            "என் இதயத்தின் இனிய கீர்த்தி!",
+            "உன் கனவுகள் யாவும் நனவாக,",
+            "இறைவன் துணையாய் வரம் தருவானாக.",
+            "நீ நடக்கும் பாதையெல்லாம்,",
+            "பூக்கள் பூத்திட வேண்டுமே.",
+            "உன் கண்ணில் கண்ணீர் வந்தால்,",
+            "அதைத் துடைக்க நான் வேண்டுமே.",
+          ],
+        },
+        {
+          label: "சரணம் 2 (Verse 2)",
+          lines: [
+            "உன் கவலை சொல்லும் நேரத்தில்,",
+            "உன் தோளாய் நான் இருப்பேன்.",
+            "உலகமே எதிர்த்துப் போனாலும்,",
+            "உன் பக்கம் நான் நிற்பேன்.",
+            "வெற்றியிலும் உன் கூட இருப்பேன்,",
+            "தோல்வியிலும் கை கொடுப்பேன்,",
+            "எத்தனை காலம் கடந்தாலும்,",
+            "உனக்கான துணையாய் இருப்பேன்.",
+            "நீ சாய்ந்து கொள்ளும் இடமாய்,",
+            "என் இதயம் என்றும் இருக்கட்டும்,",
+            "உன் மனம் தேடும் நிம்மதியாய்,",
+            "நம் பந்தம் என்றும் நிலைக்கட்டும்.",
+          ],
+        },
+        {
+          label: "முடிவுரை (Bridge & Outro)",
+          lines: [
+            "உன்னை எனக்குப் பிடித்த அளவை,",
+            "வார்த்தைகளால் சொல்ல முடியாது.",
+            "உன்னைப் போன்ற ஒரு உறவை,",
+            "காலங்கள் கூட மாற்ற முடியாது.",
+            "நீ கேட்கும் முன்னே உன் தேவைகள்,",
+            "நிறைவேற இறைவனை வேண்டினேன்! ♥",
+          ],
+        },
+      ],
     },
     closingMessage:
       "As this day unfolds, may this beautiful melody accompany you into a brand new year of happiness, beauty, and wonder. Happy Birthday once again, Krithika!",
     vinylQuote: "“Where words fail, music speaks. Where music plays, love stays.”",
-    playPrompt: "Tap to spin the record & play Sidu Sidu ♫",
+    playPrompt: "Tap the vinyl to spin & play the dedicated song ♫",
   },
 };
