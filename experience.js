@@ -466,6 +466,52 @@ class BirthdayExperience {
               <p class="scrapbook-subtitle">${birthdayConfig.scrapbook.subtitle}</p>
             </div>
 
+            <!-- Featured Masterpiece Showcase Card -->
+            <div class="scrapbook-featured-hero" id="featuredArtworkCard" role="button" tabindex="0" title="Click to view full screen">
+              <div class="featured-badge">
+                <span class="badge-sparkle">✨</span>
+                <span>Special Dedicated Artwork</span>
+                <span class="badge-sparkle">✨</span>
+              </div>
+              
+              <div class="featured-frame">
+                <div class="featured-tape featured-tape--top-left"></div>
+                <div class="featured-tape featured-tape--top-right"></div>
+                
+                <div class="featured-img-container">
+                  <img src="${birthdayConfig.scrapbook.featured.src}" alt="${birthdayConfig.scrapbook.featured.title}" class="featured-hero-img" id="featuredArtworkImg" />
+                  <div class="featured-overlay">
+                    <span class="fullscreen-cta-pill">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                      </svg>
+                      Tap to View Full Screen ⛶
+                    </span>
+                  </div>
+                </div>
+
+                <div class="featured-hero-meta">
+                  <h2 class="featured-hero-title">${birthdayConfig.scrapbook.featured.title}</h2>
+                  <p class="featured-hero-quote">${birthdayConfig.scrapbook.featured.quote}</p>
+                  <p class="featured-hero-caption">${birthdayConfig.scrapbook.featured.caption}</p>
+                  <div class="featured-hero-action-bar">
+                    <button class="btn-fullscreen-hero" id="btnOpenHeroFullscreen" type="button">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                      </svg>
+                      View Full Screen ⛶
+                    </button>
+                    <span class="featured-hint">23 World Scripts • Tamil, Telugu, Hindi, Arabic, Japanese, Korean & more</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Scrapbook Divider -->
+            <div class="scrapbook-section-divider">
+              <span>✦ &nbsp; More Cherished Snapshots &nbsp; ✦</span>
+            </div>
+
             <div class="scrapbook-grid">
               ${birthdayConfig.scrapbook.photos.map(p => `
                 <div class="polaroid-card" style="transform: rotate(${p.rotation}deg);" data-photo-id="${p.id}" role="button" tabindex="0">
@@ -486,6 +532,14 @@ class BirthdayExperience {
             </div>
 
             <div style="display: flex; gap: 14px; justify-content: center; margin-top: 36px; flex-wrap: wrap;">
+              <button class="btn-primary" style="background: rgba(255,255,255,0.15); color: #fff;" data-goto="screen-c">
+                ← Back to Gifts
+              </button>
+              <button class="btn-primary" data-goto="screen-h">
+                Next: Vinyl Music Player 🎵 →
+              </button>
+            </div>
+          </section>
               <button class="btn-primary" style="background: rgba(255,255,255,0.15); color: #fff;" data-goto="screen-c">
                 ← Back to Gifts
               </button>
@@ -559,12 +613,25 @@ class BirthdayExperience {
 
         <!-- Lightbox Modal -->
         <div class="exp-lightbox" id="expLightbox" role="dialog" aria-modal="true" aria-label="Photo memory details">
-          <div class="lightbox-content">
-            <button class="lightbox-close" id="lightboxCloseBtn" aria-label="Close photo view">✕</button>
+          <div class="lightbox-content" id="lightboxContent">
+            <div class="lightbox-top-actions">
+              <button class="lightbox-fs-btn" id="lightboxFullscreenBtn" title="Toggle Fullscreen (or press F)" aria-label="Toggle Fullscreen">
+                <svg class="fs-icon-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                </svg>
+                <svg class="fs-icon-exit" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                  <path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/>
+                </svg>
+                <span class="fs-text">Full Screen</span>
+              </button>
+              <button class="lightbox-close" id="lightboxCloseBtn" aria-label="Close photo view">✕</button>
+            </div>
             <div class="lightbox-img-wrap" id="lightboxImgWrap"></div>
-            <h3 class="lightbox-title" id="lightboxTitle"></h3>
-            <p class="lightbox-caption" id="lightboxCaption"></p>
-            <p class="lightbox-date" id="lightboxDate"></p>
+            <div class="lightbox-meta-wrap">
+              <h3 class="lightbox-title" id="lightboxTitle"></h3>
+              <p class="lightbox-caption" id="lightboxCaption"></p>
+              <p class="lightbox-date" id="lightboxDate"></p>
+            </div>
           </div>
         </div>
       </div>
@@ -735,6 +802,27 @@ class BirthdayExperience {
       });
     }
 
+    // Screen G: Featured Masterpiece Full Screen
+    const featuredCard = document.getElementById('featuredArtworkCard');
+    const heroFsBtn = document.getElementById('btnOpenHeroFullscreen');
+    const openFeaturedHero = (e) => {
+      if (e) e.stopPropagation();
+      if (birthdayConfig.scrapbook && birthdayConfig.scrapbook.featured) {
+        this.openLightbox(birthdayConfig.scrapbook.featured, true);
+      }
+    };
+    if (featuredCard) featuredCard.addEventListener('click', openFeaturedHero);
+    if (heroFsBtn) heroFsBtn.addEventListener('click', openFeaturedHero);
+
+    // Fullscreen toggle button in Lightbox
+    const lbFsBtn = document.getElementById('lightboxFullscreenBtn');
+    if (lbFsBtn) {
+      lbFsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.toggleLightboxFullscreen();
+      });
+    }
+
     const lightboxClose = document.getElementById('lightboxCloseBtn');
     const lightbox = document.getElementById('expLightbox');
     if (lightboxClose) lightboxClose.addEventListener('click', () => this.closeLightbox());
@@ -743,6 +831,18 @@ class BirthdayExperience {
         if (e.target === lightbox) this.closeLightbox();
       });
     }
+
+    // Keyboard support: ESC to close lightbox, F to toggle fullscreen
+    document.addEventListener('keydown', (e) => {
+      const lb = document.getElementById('expLightbox');
+      if (lb && lb.classList.contains('is-open')) {
+        if (e.key === 'Escape') {
+          this.closeLightbox();
+        } else if (e.key === 'f' || e.key === 'F') {
+          this.toggleLightboxFullscreen();
+        }
+      }
+    });
 
     // Screen H: Vinyl Controls
     const vinylDisc = document.getElementById('vinylDisc');
@@ -900,17 +1000,21 @@ class BirthdayExperience {
     }
   }
 
-  openLightbox(photo) {
+  openLightbox(photo, isFullscreen = false) {
     const lightbox = document.getElementById('expLightbox');
+    const content = document.getElementById('lightboxContent');
     const imgWrap = document.getElementById('lightboxImgWrap');
     const title = document.getElementById('lightboxTitle');
     const caption = document.getElementById('lightboxCaption');
     const date = document.getElementById('lightboxDate');
+    const openIcon = document.querySelector('.fs-icon-open');
+    const exitIcon = document.querySelector('.fs-icon-exit');
+    const fsText = document.querySelector('.fs-text');
 
     if (!lightbox) return;
 
     if (photo.src) {
-      imgWrap.innerHTML = `<img src="${photo.src}" alt="${photo.title}" class="lightbox-img" />`;
+      imgWrap.innerHTML = `<img src="${photo.src}" alt="${photo.title}" class="lightbox-img" id="lightboxActiveImg" />`;
     } else {
       imgWrap.innerHTML = `
         <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: ${photo.gradient}; color: #fff;">
@@ -923,11 +1027,63 @@ class BirthdayExperience {
     title.textContent = photo.title;
     caption.textContent = photo.caption;
     date.textContent = photo.date;
+
+    if (content) {
+      if (photo.isFeatured || isFullscreen) {
+        content.classList.add('is-featured-mode');
+        content.classList.add('is-fullscreen-view');
+        if (openIcon) openIcon.style.display = 'none';
+        if (exitIcon) exitIcon.style.display = 'inline-block';
+        if (fsText) fsText.textContent = 'Exit Fullscreen';
+      } else {
+        content.classList.remove('is-featured-mode');
+        content.classList.remove('is-fullscreen-view');
+        if (openIcon) openIcon.style.display = 'inline-block';
+        if (exitIcon) exitIcon.style.display = 'none';
+        if (fsText) fsText.textContent = 'Full Screen';
+      }
+    }
+
     lightbox.classList.add('is-open');
+  }
+
+  toggleLightboxFullscreen() {
+    const lightbox = document.getElementById('expLightbox');
+    const content = document.getElementById('lightboxContent');
+    const openIcon = document.querySelector('.fs-icon-open');
+    const exitIcon = document.querySelector('.fs-icon-exit');
+    const fsText = document.querySelector('.fs-text');
+    if (!lightbox || !content) return;
+
+    const isFull = content.classList.toggle('is-fullscreen-view');
+
+    if (isFull) {
+      if (openIcon) openIcon.style.display = 'none';
+      if (exitIcon) exitIcon.style.display = 'inline-block';
+      if (fsText) fsText.textContent = 'Exit Fullscreen';
+      if (lightbox.requestFullscreen && !document.fullscreenElement) {
+        lightbox.requestFullscreen().catch(() => {});
+      }
+    } else {
+      if (openIcon) openIcon.style.display = 'inline-block';
+      if (exitIcon) exitIcon.style.display = 'none';
+      if (fsText) fsText.textContent = 'Full Screen';
+      if (document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
   }
 
   closeLightbox() {
     const lightbox = document.getElementById('expLightbox');
+    const content = document.getElementById('lightboxContent');
+    if (document.fullscreenElement && document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {});
+    }
+    if (content) {
+      content.classList.remove('is-fullscreen-view');
+      content.classList.remove('is-featured-mode');
+    }
     if (lightbox) lightbox.classList.remove('is-open');
   }
 
